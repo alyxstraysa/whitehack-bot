@@ -2,9 +2,15 @@
 
 import os
 import discord
-from secrets import DISCORD_TOKEN
 
-TOKEN = DISCORD_TOKEN
+ON_HEROKU = 'ON_HEROKU' in os.environ
+
+if ON_HEROKU == False:
+    from secrets import DISCORD_TOKEN
+    TOKEN = DISCORD_TOKEN
+else:
+    TOKEN = os.environ.get('ON_HEROKU')
+
 client = discord.Client()
 
 @client.event
