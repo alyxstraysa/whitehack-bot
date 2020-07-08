@@ -9,7 +9,7 @@ if ON_HEROKU == False:
     from secrets import DISCORD_TOKEN
     TOKEN = DISCORD_TOKEN
 else:
-    TOKEN = os.environ.get('ON_HEROKU')
+    TOKEN = os.environ.get('TOKEN')
 
 client = discord.Client()
 
