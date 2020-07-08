@@ -73,4 +73,11 @@ async def intcheck(ctx, username):
     if (10 - win_counter) > 5:
         await ctx.send("{username} is a dirty inter!".format(username=username))
     
+    if win_counter == 5:
+        await ctx.send("{username} is a coinflip player!".format(username=username))
+
+@bot.command()
+async def duocheck(ctx, username):
+    await ctx.send("You should not duo with {username}".format(username=username))
+
 bot.run(TOKEN)
