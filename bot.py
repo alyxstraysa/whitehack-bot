@@ -48,7 +48,8 @@ async def on_message(message):
 async def intcheck(ctx, username):
     user = requests.get("https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/{username}?api_key={rito_api_token}".format(username=username,rito_api_token=rito_api_token))
     user = user.json()
-    accountId = user['accountID']
+    print(user)
+    accountId = user['accountId']
 
     r = requests.get("https://na1.api.riotgames.com/lol/match/v4/matchlists/by-account/{account_id}?endIndex=10&api_key={rito_api_token}".format(account_id = accountId, rito_api_token=rito_api_token)
     )
