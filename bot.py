@@ -13,7 +13,7 @@ if ON_HEROKU == False:
 
 else:
     TOKEN = os.environ.get('TOKEN')
-    rito_api_token = os.environ('RITO_API_TOKEN')
+    rito_api_token = os.environ.get('RITO_API_TOKEN')
 
 bot = commands.Bot(command_prefix='wh ')
 
