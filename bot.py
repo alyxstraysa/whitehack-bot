@@ -26,7 +26,10 @@ async def on_message(message):
 
     for word in nice_variations:
         if word in message.content.strip().lower():
-            await message.channel.send('Naisu!')
+            await message.channel.send("Naisu!")
             await message.channel.send("https://media.giphy.com/media/qPcX2mzk3NmjC/giphy.gif")
+
+    if "JT" in message.content():
+        await message.channel.send("You mean professional jungler WingedNinja2?")
 
 client.run(TOKEN)
