@@ -8,8 +8,9 @@ from discord.ext import commands
 ON_HEROKU = 'ON_HEROKU' in os.environ
 
 if ON_HEROKU == False:
-    from secrets import DISCORD_TOKEN
+    from secrets import DISCORD_TOKEN, rito_api_token
     TOKEN = DISCORD_TOKEN
+
 else:
     TOKEN = os.environ.get('TOKEN')
     rito_api_token = os.environ('RITO_API_TOKEN')
@@ -63,5 +64,8 @@ async def intcheck(ctx, username):
                     win_counter += 1
 
     await ctx.send("{username} has lost {loss} out of their past 10 games!".format(username=username, loss=(10 - win_counter)))
+
+    if (10 - win_counter) > 5:
+        await ctx.send("{username} is a dirty inter!".format(username=username))
     
 bot.run(TOKEN)
