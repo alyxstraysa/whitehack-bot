@@ -9,12 +9,18 @@ client = discord.Client()
 
 @client.event
 async def on_ready():
-    for guild in client.guilds:
-        if guild == 'The Alt-Write':
-            print(f'{client.user} has connected to Discord!')
-            print(f'{guild.name}(id: {guild.id})')
+    print('We have logged in as {0.user}'.format(client))
 
-            members = '\n - '.join([member.name for member in guild.members])
-            print(f'Guild Members:\n - {members}')
+@client.event
+async def on_message(message):
+    if message.author == client.user:
+        return
+
+    nice_variations = ['nice', 'naisu', 'naice', ]
+
+    for word in nice_variations:
+        if word in message.content.strip().lower():
+            await message.channel.send('Naisu!')
+            await message.channel.send("https://media.giphy.com/media/qPcX2mzk3NmjC/giphy.gif")
 
 client.run(TOKEN)
