@@ -46,7 +46,11 @@ async def on_message(message):
 
 @bot.command()
 async def intcheck(ctx, username):
-    r = requests.get("https://na1.api.riotgames.com/lol/match/v4/matchlists/by-account/JqUMHMnyZtqXTOJW0RVjNcJ3fvwsOALgXymZ8PvR5pbLKw?endIndex=10&api_key={}".format(rito_api_token)
+    user = requests.get("https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/{username}?api_key={rito_api_token}".format(username=username,rito_api_token=rito_api_token))
+    user = user.json()
+    accountId = user['accountID']
+
+    r = requests.get("https://na1.api.riotgames.com/lol/match/v4/matchlists/by-account/{account_id}?endIndex=10&api_key={rito_api_token}".format(account_id = accountId, rito_api_token=rito_api_token)
     )
 
     match_history = r.json()
