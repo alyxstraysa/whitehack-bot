@@ -95,22 +95,34 @@ async def leaguematch(ctx):
     online_users = []
     for user in ctx.guild.members:
         if (user.status != discord.Status.offline) and (user.bot == False):
+        #if (user.status != discord.Status.offline):
             online_users.append(user.id)
 
-    if len(online_users) >= 3:
-        print("Match found!")
+    if len(online_users) >= 10:
         online_users.remove(ctx.message.author.id)
-        print(online_users)
-        selected_match = random.sample(online_users, k=3)
+        selected_match = random.sample(online_users, k=9)
         selected_match.append(ctx.message.author.id)
 
         create_table()
         
         for user in selected_match:
-            print(bot.get_user(user))
             matchmaking(user)
-        
+
+        print(selected_match)
+        await ctx.send("""Blue Team: {user1}, {user2}, {user3}, {user4}, {user5} \nRed Team: {user6}, {user7}, {user8}, {user9}, {user10}""".
+        format(user1 = ctx.guild.get_member(int(selected_match[0])), 
+        user2=ctx.guild.get_member(int(selected_match[1])), 
+        user3=ctx.guild.get_member(int(selected_match[2])),
+        user4 = ctx.guild.get_member(int(selected_match[3])), 
+        user5 = ctx.guild.get_member(int(selected_match[4])), 
+        user6 = ctx.guild.get_member(int(selected_match[5])), 
+        user7 = ctx.guild.get_member(int(selected_match[6])), 
+        user8 = ctx.guild.get_member(int(selected_match[7])), 
+        user9 = ctx.guild.get_member(int(selected_match[8])), 
+        user10 = ctx.guild.get_member(int(selected_match[9]))
+        ))
+
     else:
-        print("Not enough users online!")
+        await ctx.send("Not enough users online!")
 
 bot.run(TOKEN)
