@@ -81,7 +81,6 @@ def matchmaking(user):
                 conn.commit()
                 cursor.close()
                 conn.close()
-                print("PostgreSQL conn is closed")
 
 bot = commands.Bot(command_prefix='wh ')
 
@@ -163,24 +162,55 @@ async def leaguematch(ctx):
         selected_match = random.sample(online_users, k=9)
         selected_match.append(ctx.message.author.id)
 
-        create_table()
+        #create_table()
         
         for user in selected_match:
             matchmaking(user)
 
-        print(selected_match)
-        await ctx.send("""Blue Team: {user1}, {user2}, {user3}, {user4}, {user5} \nRed Team: {user6}, {user7}, {user8}, {user9}, {user10}""".
-        format(user1 = ctx.guild.get_member(int(selected_match[0])), 
-        user2=ctx.guild.get_member(int(selected_match[1])), 
-        user3=ctx.guild.get_member(int(selected_match[2])),
-        user4 = ctx.guild.get_member(int(selected_match[3])), 
-        user5 = ctx.guild.get_member(int(selected_match[4])), 
-        user6 = ctx.guild.get_member(int(selected_match[5])), 
-        user7 = ctx.guild.get_member(int(selected_match[6])), 
-        user8 = ctx.guild.get_member(int(selected_match[7])), 
-        user9 = ctx.guild.get_member(int(selected_match[8])), 
+        user1 = ctx.guild.get_member(int(selected_match[0]))
+        user2 = ctx.guild.get_member(int(selected_match[1]))
+        user3 = ctx.guild.get_member(int(selected_match[2]))
+        user4 = ctx.guild.get_member(int(selected_match[3])) 
+        user5 = ctx.guild.get_member(int(selected_match[4])) 
+        user6 = ctx.guild.get_member(int(selected_match[5])) 
+        user7 = ctx.guild.get_member(int(selected_match[6])) 
+        user8 = ctx.guild.get_member(int(selected_match[7])) 
+        user9 = ctx.guild.get_member(int(selected_match[8])) 
         user10 = ctx.guild.get_member(int(selected_match[9]))
+
+        await ctx.send("""Blue Team: {user1}, {user2}, {user3}, {user4}, {user5} \nRed Team: {user6}, {user7}, {user8}, {user9}, {user10}""".
+        format(user1 = user1, 
+        user2 = user2, 
+        user3 = user3,
+        user4 = user4, 
+        user5 = user5, 
+        user6 = user6, 
+        user7 = user7, 
+        user8 = user8, 
+        user9 = user9, 
+        user10 = user10
         ))
+
+        kda_list = []
+        for i in range(10):
+            kills = random.randint(0, 20)
+            deaths = random.randint(0, 20)
+            assists = random.randint(0, 20)
+            kda_list.append("{kills}/{deaths}/{assists}".format(kills=kills, deaths=deaths, assists=assists))
+
+        print(kda_list)
+        await ctx.send(""" 
+        Results - \n{user1}:{kda1}\n{user2}:{kda2}\n{user3}:{kda3}\n{user4}:{kda4}\n{user5}:{kda5}\n{user6}:{kda6}\n{user7}:{kda7}\n{user8}:{kda8}\n{user9}:{kda9}\n{user10}:{kda10}
+        """.format(user1=user1, kda1=kda_list[0],
+        user2=user2, kda2=kda_list[1],
+        user3=user3, kda3=kda_list[2],
+        user4=user4, kda4=kda_list[3],
+        user5=user5, kda5=kda_list[4],
+        user6=user6, kda6=kda_list[5],
+        user7=user7, kda7=kda_list[6],
+        user8=user8, kda8=kda_list[7],
+        user9=user9, kda9=kda_list[8],
+        user10=user10, kda10=kda_list[9]))
 
     else:
         await ctx.send("Not enough users online!")
