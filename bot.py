@@ -71,10 +71,10 @@ async def intcheck(ctx, username):
     await ctx.send("{username} has lost {loss} out of their past 10 games!".format(username=username, loss=(10 - win_counter)))
 
     if (10 - win_counter) > 5:
-        await ctx.send("{username} is a dirty inter!".format(username=username))
+        await ctx.send("@{username} is a dirty inter!".format(username=username))
     
     if win_counter == 5:
-        await ctx.send("{username} is a coinflip player!".format(username=username))
+        await ctx.send("@{username} is a coinflip player!".format(username=username))
 
 @bot.command()
 async def duocheck(ctx, username):
