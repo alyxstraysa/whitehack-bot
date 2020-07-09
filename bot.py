@@ -200,7 +200,7 @@ async def leaguematch(ctx):
 
         print(kda_list)
         await ctx.send(""" 
-        Results - \n{user1}:{kda1}\n{user2}:{kda2}\n{user3}:{kda3}\n{user4}:{kda4}\n{user5}:{kda5}\n{user6}:{kda6}\n{user7}:{kda7}\n{user8}:{kda8}\n{user9}:{kda9}\n{user10}:{kda10}
+        Results - \n{user1} : {kda1}\n{user2} : {kda2}\n{user3} : {kda3}\n{user4} : {kda4}\n{user5} : {kda5}\n{user6} : {kda6}\n{user7} : {kda7}\n{user8} : {kda8}\n{user9} : {kda9}\n{user10} : {kda10}
         """.format(user1=user1, kda1=kda_list[0],
         user2=user2, kda2=kda_list[1],
         user3=user3, kda3=kda_list[2],
