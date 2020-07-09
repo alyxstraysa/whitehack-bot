@@ -41,10 +41,10 @@ async def on_message(message):
     if "JT" in message.content:
         await message.channel.send("You mean professional jungler WingedNinja2?")
     
-    if ("Justin" or "justin") in message.content:
+    if "Justin" in message.content:
         await message.channel.send("Tarkov is not a real game.")
     
-    if ("iron" or "silver") in message.content:
+    if "iron" in message.content:
         await message.channel.send("You mean elo heaven?")
 
     await bot.process_commands(message)
