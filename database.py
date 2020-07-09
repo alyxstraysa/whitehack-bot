@@ -7,6 +7,14 @@ if ON_HEROKU == False:
     from secrets import DISCORD_TOKEN, rito_api_token, USER, PASSWORD, DATABASE_URL, DATABASE
     TOKEN = DISCORD_TOKEN
 
+else:
+    TOKEN = os.environ.get('TOKEN')
+    rito_api_token = os.environ.get('RITO_API_TOKEN')
+    USER = os.environ.get('USER')
+    PASSWORD = os.environ.get('PASSWORD')
+    DATABASE = os.environ.get("DATABASE")
+    DATABASE_URL = os.environ.get('DATABASE_URL')
+
 def create_table():
     conn = psycopg2.connect(DATABASE_URL, sslmode='require',
                             database=DATABASE, user=USER, password=PASSWORD)
