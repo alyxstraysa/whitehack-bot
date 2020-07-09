@@ -36,16 +36,14 @@ async def on_message(message):
     if "JT" in message.content:
         await message.channel.send("You mean professional jungler WingedNinja2?")
     
-    if "Justin" in message.content:
-        await message.channel.send("You mean Tarkov only mid?")
+    if "Justin" or "justin" in message.content:
+        await message.channel.send("Tarkov is not a real game.")
+    
+    if "iron" or "silver" in message.content:
+        await message.channel.send("You mean elo heaven?")
 
     await bot.process_commands(message)
 
-# @bot.command()
-# async def intcheck(ctx, username):
-#     await ctx.send("{} is a dirty inter!".format(username))
-
-@bot.command()
 async def intcheck(ctx, username):
     win_counter = 0
 
@@ -66,7 +64,7 @@ async def intcheck(ctx, username):
             async with session.get("https://na1.api.riotgames.com/lol/match/v4/matches/{game_id}?api_key={riot_token}".format(game_id=game_id, riot_token=rito_api_token)) as r:
                 if r.status == 200:
                     indiv_hist = await r.json()
-                    
+
                 for participant in indiv_hist['participants']:
                     if participant['championId'] == champion_id:
                         if participant['stats']['win'] == True:
