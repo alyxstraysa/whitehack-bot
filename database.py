@@ -1,5 +1,5 @@
 import psycopg2
-from secrets import USER, PASSWORD, DATABASE, DATABASE_URL
+#from secrets import USER, PASSWORD, DATABASE, DATABASE_URL
 
 def create_table():
     conn = psycopg2.connect(DATABASE_URL, sslmode='require',
