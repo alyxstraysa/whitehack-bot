@@ -5,16 +5,21 @@ import discord
 import requests
 from discord.ext import commands
 import aiohttp
+import psycopg2
 
 ON_HEROKU = 'ON_HEROKU' in os.environ
 
 if ON_HEROKU == False:
-    from secrets import DISCORD_TOKEN, rito_api_token
+    from secrets import DISCORD_TOKEN, rito_api_token, USER, PASSWORD, DATABASE_URL, DATABASE
     TOKEN = DISCORD_TOKEN
 
 else:
     TOKEN = os.environ.get('TOKEN')
     rito_api_token = os.environ.get('RITO_API_TOKEN')
+    USER = os.environ.get('USER')
+    PASSWORD = os.environ.get('PASSWORD')
+    DATABASE = os.environ.get("DATABASE")
+    DATABASE_URL = os.environ.get('DATABASE_URL')
 
 bot = commands.Bot(command_prefix='wh ')
 
@@ -36,10 +41,10 @@ async def on_message(message):
     if "JT" in message.content:
         await message.channel.send("You mean professional jungler WingedNinja2?")
     
-    if "Justin" or "justin" in message.content:
+    if ("Justin" or "justin") in message.content:
         await message.channel.send("Tarkov is not a real game.")
     
-    if "iron" or "silver" in message.content:
+    if ("iron" or "silver") in message.content:
         await message.channel.send("You mean elo heaven?")
 
     await bot.process_commands(message)
@@ -81,5 +86,11 @@ async def intcheck(ctx, username):
 @bot.command()
 async def duocheck(ctx, username):
     await ctx.send("You should not duo with {username}".format(username=username))
+
+@bot.command()
+async def leaguematch(ctx):
+    for user in ctx.guild.members:
+        if user.status != discord.Status.offline:
+            print(user)
 
 bot.run(TOKEN)
