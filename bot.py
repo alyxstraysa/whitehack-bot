@@ -51,6 +51,7 @@ async def on_message(message):
 
     await bot.process_commands(message)
 
+@bot.command()
 async def intcheck(ctx, username):
     win_counter = 0
 
