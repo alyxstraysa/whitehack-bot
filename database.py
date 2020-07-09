@@ -1,5 +1,10 @@
 import psycopg2
-#from secrets import USER, PASSWORD, DATABASE, DATABASE_URL
+
+ON_HEROKU = 'ON_HEROKU' in os.environ
+
+if ON_HEROKU == False:
+    from secrets import DISCORD_TOKEN, rito_api_token, USER, PASSWORD, DATABASE_URL, DATABASE
+    TOKEN = DISCORD_TOKEN
 
 def create_table():
     conn = psycopg2.connect(DATABASE_URL, sslmode='require',
