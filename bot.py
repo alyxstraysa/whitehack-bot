@@ -6,6 +6,8 @@ import requests
 from discord.ext import commands
 import aiohttp
 import psycopg2
+import random
+from database import matchmaking, create_table
 
 ON_HEROKU = 'ON_HEROKU' in os.environ
 
@@ -89,8 +91,25 @@ async def duocheck(ctx, username):
 
 @bot.command()
 async def leaguematch(ctx):
+    online_users = []
     for user in ctx.guild.members:
-        if user.status != discord.Status.offline:
-            print(user)
+        if (user.status != discord.Status.offline) and (user.bot == False):
+            online_users.append(user.id)
+
+    if len(online_users) >= 3:
+        print("Match found!")
+        online_users.remove(ctx.message.author.id)
+        print(online_users)
+        selected_match = random.sample(online_users, k=3)
+        selected_match.append(ctx.message.author.id)
+
+        create_table()
+        
+        for user in selected_match:
+            print(bot.get_user(user))
+            matchmaking(user)
+        
+    else:
+        print("Not enough users online!")
 
 bot.run(TOKEN)
