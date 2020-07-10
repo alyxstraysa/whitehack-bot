@@ -41,7 +41,26 @@ def create_table():
     conn.commit()
     
     conn.close()
-    
+
+def get_lp(discord_id):
+    discord_id = str(discord_id)
+
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require',
+                            database=DATABASE, user=USER, password=PASSWORD)
+    cursor = conn.cursor()
+    cursor.execute(
+            """
+            SELECT *
+            WHERE
+            discord_id = %s
+            """, (discord_id)
+    )
+
+    print(cursor[0])
+
+    return cursor[0]
+
+
 def matchmaking(user):
     try:
         conn = psycopg2.connect(DATABASE_URL, sslmode='require',
@@ -148,6 +167,11 @@ async def intcheck(ctx, username):
 @bot.command()
 async def duocheck(ctx, username):
     await ctx.send("You should not duo with {username}".format(username=username))
+
+@bot.command()
+async def getlp(ctx):
+    get_lp(ctx.message.author.id)
+
 
 @bot.command()
 async def leaguematch(ctx):
