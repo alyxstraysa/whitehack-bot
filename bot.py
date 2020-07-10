@@ -150,7 +150,7 @@ def lp_lose(discord_id):
             "Iron 4" : "Iron 4",
             "Iron 3" : "Iron 4",
             "Iron 2" : "Iron 3",
-            "Iron 1" : "Silver 2",
+            "Iron 1" : "Iron 2",
             "Silver 4" : "Silver 4",
             "Silver 3" : "Silver 4",
             "Silver 2" : "Silver 3",
