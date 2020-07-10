@@ -101,7 +101,7 @@ def lp_win(discord_id):
         cursor.execute(
             """
             UPDATE elo_tracker
-            SET lp = %s, division = %s,
+            SET lp = %s, division = %s
             WHERE
             discord_id = %s
             """, (lp, league_dict[division], discord_id)
@@ -162,7 +162,7 @@ def lp_lose(discord_id):
         cursor.execute(
             """
             UPDATE elo_tracker
-            SET lp = %s, division = %s,
+            SET lp = %s, division = %s
             WHERE
             discord_id = %s
             """, (lp, league_dict[division], discord_id)
