@@ -187,6 +187,9 @@ async def on_message(message):
     if "iron" in message.content:
         await message.channel.send("You mean elo heaven?")
 
+    if "haha" in message.content:
+        await message.channel.send("https://tenor.com/view/dance-waluigi-mario-meme-gif-5329543")
+
     await bot.process_commands(message)
 
 @bot.command()
