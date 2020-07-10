@@ -250,14 +250,8 @@ async def on_message(message):
     elif "iron" in message.content:
         await message.channel.send("You mean elo heaven?")
 
-    elif "haha" in message.content:
-        await message.channel.send("https://tenor.com/view/dance-waluigi-mario-meme-gif-5329543")
-
     elif re.search(r'wa+h', message.content) is not None:
         await message.channel.send("https://tenor.com/view/dance-waluigi-mario-meme-gif-5329543")
-
-    elif "Jornoh" in message.content:
-        await message.channel.send("Prog rock is fake music.")
 
     await bot.process_commands(message)
 
