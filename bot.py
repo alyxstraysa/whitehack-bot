@@ -96,8 +96,6 @@ def lp_win(discord_id):
             "Gold 4" : "Gold 4"
         }
 
-        print(league_dict[division])
-
         cursor.execute(
             """
             UPDATE elo_tracker
@@ -158,7 +156,6 @@ def lp_lose(discord_id):
             "Gold 4" : "Gold 4"
         }
         
-        print(league_dict[division])
         cursor.execute(
             """
             UPDATE elo_tracker
