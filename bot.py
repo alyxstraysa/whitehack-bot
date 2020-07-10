@@ -298,7 +298,7 @@ async def leaguematch(ctx):
         user9=user9, kda9=kda_list[8],
         user10=user10, kda10=kda_list[9]))
 
-        winner = random.choice('blue', 'red')
+        winner = random.choice(['blue', 'red'])
 
         if (winner == 'blue'):
             for user in [selected_match[0], selected_match[1], selected_match[2], selected_match[3], selected_match[4]]:
