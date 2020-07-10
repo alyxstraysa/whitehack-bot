@@ -230,11 +230,11 @@ async def duocheck(ctx, username):
 
 @bot.command()
 async def getlp(ctx):
-# try:
-    division, lp = get_lp(ctx.message.author.id)
-    await ctx.send("Your current division is {} and your current LP is {}.".format(division, lp))
-    # except:
-    #     await ctx.send("You have not played any games yet!")
+    try:
+        division, lp = get_lp(ctx.message.author.id)
+        await ctx.send("Your current division is {} and your current LP is {}.".format(division, lp))
+    except:
+        await ctx.send("You have not played any games yet!")
 
 @bot.command()
 async def leaguematch(ctx):
