@@ -44,22 +44,82 @@ def create_table():
 
 def get_lp(discord_id):
     discord_id = str(discord_id)
-
     conn = psycopg2.connect(DATABASE_URL, sslmode='require',
                             database=DATABASE, user=USER, password=PASSWORD)
     cursor = conn.cursor()
     cursor.execute(
             """
             SELECT *
+            FROM elo_tracker
             WHERE
             discord_id = %s
-            """, (discord_id)
+            """, (discord_id,)
     )
 
-    print(cursor[0])
+    result = cursor.fetchall()[0]
+    division = result[1]
+    lp = result[2]
+    return division, lp
 
-    return cursor[0]
+def lp_win(discord_id):
+    discord_id = str(discord_id)
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require',
+                            database=DATABASE, user=USER, password=PASSWORD)
+    cursor = conn.cursor()
+    cursor.execute(
+            """
+            SELECT *
+            FROM elo_tracker
+            WHERE
+            discord_id = %s
+            """, (discord_id,)
+    )
+    result = cursor.fetchall()[0]
+    lp = result[2]
 
+    lp += random.randint(13, 20)
+
+    cursor.execute(
+            """
+            UPDATE elo_tracker
+            SET lp = %s
+            WHERE
+            discord_id = %s
+            """, (lp, discord_id)
+    )
+
+    conn.commit()
+    conn.close()
+
+def lp_lose(discord_id):
+    discord_id = str(discord_id)
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require',
+                            database=DATABASE, user=USER, password=PASSWORD)
+    cursor = conn.cursor()
+    cursor.execute(
+            """
+            SELECT *
+            FROM elo_tracker
+            WHERE
+            discord_id = %s
+            """, (discord_id,)
+    )
+    result = cursor.fetchall()[0]
+    lp = result[2]
+
+    lp -= random.randint(13, 20)
+
+    cursor.execute(
+            """
+            UPDATE elo_tracker
+            SET lp = %s
+            WHERE
+            discord_id = %s
+            """, (lp, discord_id)
+    )
+
+    conn.commit()
+    conn.close()
 
 def matchmaking(user):
     try:
@@ -170,8 +230,11 @@ async def duocheck(ctx, username):
 
 @bot.command()
 async def getlp(ctx):
-    get_lp(ctx.message.author.id)
-
+# try:
+    division, lp = get_lp(ctx.message.author.id)
+    await ctx.send("Your current division is {} and your current LP is {}.".format(division, lp))
+    # except:
+    #     await ctx.send("You have not played any games yet!")
 
 @bot.command()
 async def leaguematch(ctx):
@@ -222,7 +285,6 @@ async def leaguematch(ctx):
             assists = random.randint(0, 20)
             kda_list.append("{kills}/{deaths}/{assists}".format(kills=kills, deaths=deaths, assists=assists))
 
-        print(kda_list)
         await ctx.send(""" 
         Results - \n{user1} : {kda1}\n{user2} : {kda2}\n{user3} : {kda3}\n{user4} : {kda4}\n{user5} : {kda5}\n{user6} : {kda6}\n{user7} : {kda7}\n{user8} : {kda8}\n{user9} : {kda9}\n{user10} : {kda10}
         """.format(user1=user1, kda1=kda_list[0],
@@ -235,6 +297,22 @@ async def leaguematch(ctx):
         user8=user8, kda8=kda_list[7],
         user9=user9, kda9=kda_list[8],
         user10=user10, kda10=kda_list[9]))
+
+        winner = random.choice('blue', 'red')
+
+        if (winner == 'blue'):
+            for user in [selected_match[0], selected_match[1], selected_match[2], selected_match[3], selected_match[4]]:
+                lp_win(user)
+
+            for user in [selected_match[5], selected_match[6], selected_match[7], selected_match[8], selected_match[9]]:
+                lp_lose(user)    
+
+        if (winner == 'red'):
+            for user in [selected_match[0], selected_match[1], selected_match[2], selected_match[3], selected_match[4]]:
+                lp_lose(user)
+
+            for user in [selected_match[5], selected_match[6], selected_match[7], selected_match[8], selected_match[9]]:
+                lp_win(user)
 
     else:
         await ctx.send("Not enough users online!")
