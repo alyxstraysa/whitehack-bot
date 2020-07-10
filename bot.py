@@ -66,6 +66,7 @@ def lp_win(discord_id):
     discord_id = str(discord_id)
     conn = psycopg2.connect(DATABASE_URL, sslmode='require',
                             database=DATABASE, user=USER, password=PASSWORD)
+                            
     cursor = conn.cursor()
     cursor.execute(
             """
@@ -76,21 +77,49 @@ def lp_win(discord_id):
             """, (discord_id,)
     )
     result = cursor.fetchall()[0]
+    division = result[1]
     lp = result[2]
 
     lp += random.randint(13, 20)
 
-    cursor.execute(
+    if (lp >= 100):
+
+        league_dict = {
+            "Iron 4" : "Iron 3",
+            "Iron 3" : "Iron 2",
+            "Iron 2" : "Iron 1",
+            "Iron 1" : "Silver 4",
+            "Silver 4" : "Silver 3",
+            "Silver 3" : "Silver 2",
+            "Silver 2" : "Silver 1",
+            "Silver 1" : "Gold 4",
+            "Gold 4" : "Gold 4"
+        }
+
+        cursor.execute(
             """
             UPDATE elo_tracker
-            SET lp = %s
+            SET lp = %s, division = %s,
             WHERE
             discord_id = %s
-            """, (lp, discord_id)
-    )
+            """, (lp, league_dict[division], discord_id)
+        )
 
-    conn.commit()
-    conn.close()
+        conn.commit()
+        conn.close()
+
+    else:
+        cursor.execute(
+                """
+                UPDATE elo_tracker
+                SET lp = %s
+                WHERE
+                discord_id = %s
+                """, (lp, discord_id)
+        )
+
+        conn.commit()
+        conn.close()
 
 def lp_lose(discord_id):
     discord_id = str(discord_id)
@@ -106,21 +135,51 @@ def lp_lose(discord_id):
             """, (discord_id,)
     )
     result = cursor.fetchall()[0]
+    division = result[1]
     lp = result[2]
 
     lp -= random.randint(13, 20)
 
-    cursor.execute(
+    if (lp <= 0):
+        if (division != "Iron"):
+            lp = 75
+
+        league_dict = {
+            "Iron 4" : "Iron 4",
+            "Iron 3" : "Iron 4",
+            "Iron 2" : "Iron 3",
+            "Iron 1" : "Silver 2",
+            "Silver 4" : "Silver 4",
+            "Silver 3" : "Silver 4",
+            "Silver 2" : "Silver 3",
+            "Silver 1" : "Silver 2",
+            "Gold 4" : "Gold 4"
+        }
+
+        cursor.execute(
             """
             UPDATE elo_tracker
-            SET lp = %s
+            SET lp = %s, division = %s,
             WHERE
             discord_id = %s
-            """, (lp, discord_id)
-    )
+            """, (lp, league_dict[division], discord_id)
+        )
 
-    conn.commit()
-    conn.close()
+        conn.commit()
+        conn.close()
+
+    else:
+        cursor.execute(
+                """
+                UPDATE elo_tracker
+                SET lp = %s
+                WHERE
+                discord_id = %s
+                """, (lp, discord_id)
+        )
+
+        conn.commit()
+        conn.close()
 
 def matchmaking(user):
     try:
