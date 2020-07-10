@@ -244,19 +244,19 @@ async def on_message(message):
     if "JT" in message.content:
         await message.channel.send("You mean professional jungler WingedNinja2?")
     
-    if "Justin" in message.content:
+    elif "Justin" in message.content:
         await message.channel.send("Tarkov is not a real game.")
     
-    if "iron" in message.content:
+    elif "iron" in message.content:
         await message.channel.send("You mean elo heaven?")
 
-    if "haha" in message.content:
+    elif "haha" in message.content:
         await message.channel.send("https://tenor.com/view/dance-waluigi-mario-meme-gif-5329543")
 
-    if re.search(r'wa+h', message.content) is not None:
+    elif re.search(r'wa+h', message.content) is not None:
         await message.channel.send("https://tenor.com/view/dance-waluigi-mario-meme-gif-5329543")
 
-    if "Jornoh" in message.content:
+    elif "Jornoh" in message.content:
         await message.channel.send("Prog rock is fake music.")
 
     await bot.process_commands(message)
