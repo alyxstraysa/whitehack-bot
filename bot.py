@@ -399,8 +399,9 @@ async def leaguematch(ctx):
 @bot.command()
 async def character(ctx):
     embed = discord.Embed(title="Whitehack Character",
-                          url="www.praisethetsun.com")
-
+                          url="http://www.praisethetsun.com")
+    embed.set_image(
+        url="https://pbs.twimg.com/media/EbdltgQWkAEuFWH?format=jpg&name=large")
     await ctx.send(embed=embed)
 
 bot.run(TOKEN)
