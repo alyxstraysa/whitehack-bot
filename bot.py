@@ -398,10 +398,18 @@ async def leaguematch(ctx):
 
 @bot.command()
 async def character(ctx):
+    async with aiohttp.ClientSession() as session:
+        async with session.get("https://mysterious-tor-57369.herokuapp.com/api/1") as r:
+            if r.status == 200:
+                character = await r.json()
+
     embed = discord.Embed(title="Whitehack Character",
                           url="http://www.praisethetsun.com")
-    embed.set_image(
-        url="https://pbs.twimg.com/media/EbdltgQWkAEuFWH?format=jpg&name=large")
+
+    embed.add_field(name="Character Name", value=character['charactername'])
+    embed.add_field(name="Class", value=character['characterclass'])
+    embed.add_field(name="Level", value=character['characterlevel'])
+
     await ctx.send(embed=embed)
 
 bot.run(TOKEN)
