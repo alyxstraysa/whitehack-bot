@@ -238,6 +238,8 @@ async def on_ready():
 async def on_message(message):
     if message.author == bot.user:
         return
+    
+    if message.author == 
 
     nice_variations = ['nice', 'naisu', 'naice', ]
 
@@ -402,16 +404,16 @@ async def leaguematch(ctx):
 @bot.command()
 async def character(ctx):
     async with aiohttp.ClientSession() as session:
-        async with session.get("https://mysterious-tor-57369.herokuapp.com/api/1") as r:
+        async with session.get("https://mysterious-tor-57369.herokuapp.com/api/characters") as r:
             if r.status == 200:
                 character = await r.json()
 
     embed = discord.Embed(title="Whitehack Character",
                           url="http://www.praisethetsun.com")
 
-    embed.add_field(name="Character Name", value=character['charactername'])
-    embed.add_field(name="Class", value=character['characterclass'])
-    embed.add_field(name="Level", value=character['characterlevel'])
+    embed.add_field(name="Character Name", value=character[0]['charactername'])
+    embed.add_field(name="Class", value=character[0]['characterclass'])
+    embed.add_field(name="Level", value=character[0]['characterlevel'])
 
     await ctx.send(embed=embed)
 
