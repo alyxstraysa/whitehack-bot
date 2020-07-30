@@ -239,7 +239,7 @@ async def on_message(message):
     if message.author == bot.user:
         return
     
-    if message.author == 
+    #if message.author == 
 
     nice_variations = ['nice', 'naisu', 'naice', ]
 
