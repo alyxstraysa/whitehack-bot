@@ -415,7 +415,7 @@ async def character(ctx):
     embed.add_field(name="Class", value=character[0]['characterclass'])
     embed.add_field(name="Level", value=character[0]['characterlevel'])
 
-    print(message.author.id)
+    print(ctx.message.author.id)
     await ctx.send(embed=embed)
 
 bot.run(TOKEN)
