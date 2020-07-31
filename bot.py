@@ -238,8 +238,8 @@ async def on_ready():
 async def on_message(message):
     if message.author == bot.user:
         return
-    
-    #if message.author == 
+
+    # if message.author ==
 
     nice_variations = ['nice', 'naisu', 'naice', ]
 
@@ -415,6 +415,7 @@ async def character(ctx):
     embed.add_field(name="Class", value=character[0]['characterclass'])
     embed.add_field(name="Level", value=character[0]['characterlevel'])
 
+    print(message.author.id)
     await ctx.send(embed=embed)
 
 bot.run(TOKEN)
