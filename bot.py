@@ -83,4 +83,27 @@ async def character(ctx):
     print(ctx.message.author.id)
     await ctx.send(embed=embed)
 
+@bot.command(brief='Recommends a random anime', description='Returns a carefully curated list of anime for non-plebs.')
+async def recommend_anime(ctx):
+    anime_id_list = [
+        "13125",
+        "10721",
+        "9756"
+    ]
+
+    anime_id = random.choice(anime_id_list)
+
+    async with aiohttp.ClientSession() as session:
+        async with session.get("https://api.jikan.moe/v3/anime/{anime_id}".format(anime_id = anime_id)) as r:
+            if r.status == 200:
+                anime = await r.json()
+
+    embed = discord.Embed(title="Anime Recommendation")
+    embed.add_field(name="Name", value=anime['title'])
+    embed.add_field(name="Description", value=anime['synopsis'])
+
+    embed.set_image = (anime['image_url'])
+
+    await ctx.send(embed=embed)
+
 bot.run(TOKEN)
