@@ -25,6 +25,8 @@ else:
 
 bot = commands.Bot(command_prefix='wh ')
 
+bot.description("RPG management tool for the Whitehack RPG as well as various memes.")
+
 
 @bot.event
 async def on_ready():
