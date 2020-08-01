@@ -64,7 +64,7 @@ async def on_message(message):
 
     await bot.process_commands(message)
 
-@bot.command()
+@bot.command(brief='Shows the requested Whitehack Character', description='Returns a registered www.praisethetsun.com Whitehack character if one such character is registered')
 async def character(ctx):
     async with aiohttp.ClientSession() as session:
         async with session.get("https://mysterious-tor-57369.herokuapp.com/api/characters") as r:
