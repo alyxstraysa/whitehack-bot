@@ -89,14 +89,12 @@ async def recommend_anime_casul(ctx):
 
     async with aiohttp.ClientSession() as session:
         api_call = "http://api.jikan.moe/v3/top/anime/{randint}".format(randint = str(random.randint(1, 20)))
-        print(api_call)
         async with session.get(api_call) as r:
             if r.status == 200:
                 anime = await r.json()
 
-    print(anime)
     
-    anime_id = random.choice(list(anime['top'].values()))["mal_id"]
+    anime_id = random.choice(anime['top'].values())["mal_id"]
 
     async with aiohttp.ClientSession() as session:
         async with session.get("https://api.jikan.moe/v3/anime/{anime_id}".format(anime_id = anime_id)) as r:
