@@ -8,6 +8,7 @@ import aiohttp
 import psycopg2
 import random
 import re
+from whitehackcommands import *
 
 ON_HEROKU = 'ON_HEROKU' in os.environ
 
@@ -66,6 +67,7 @@ async def on_message(message):
 
     await bot.process_commands(message)
 
+
 @bot.command(brief='Shows the requested Whitehack Character', description='Returns a registered www.praisethetsun.com Whitehack character if one such character is registered')
 async def character(ctx):
     async with aiohttp.ClientSession() as session:
@@ -83,21 +85,22 @@ async def character(ctx):
     print(ctx.message.author.id)
     await ctx.send(embed=embed)
 
+
 @bot.command(brief='Recommends a random (popular) anime', description='Returns a list of anime for filthy casuals.')
 @commands.cooldown(1, 4, commands.BucketType.guild)
 async def animerecfilthycasual(ctx):
 
     async with aiohttp.ClientSession() as session:
-        api_call = "http://api.jikan.moe/v3/top/anime/{randint}".format(randint = str(random.randint(1, 20)))
+        api_call = "http://api.jikan.moe/v3/top/anime/{randint}".format(
+            randint=str(random.randint(1, 20)))
         async with session.get(api_call) as r:
             if r.status == 200:
                 anime = await r.json()
 
-    
     anime_id = random.choice(anime['top'])["mal_id"]
 
     async with aiohttp.ClientSession() as session:
-        async with session.get("https://api.jikan.moe/v3/anime/{anime_id}".format(anime_id = anime_id)) as r:
+        async with session.get("https://api.jikan.moe/v3/anime/{anime_id}".format(anime_id=anime_id)) as r:
             if r.status == 200:
                 anime = await r.json()
 
@@ -111,6 +114,7 @@ async def animerecfilthycasual(ctx):
 
     await ctx.send(embed=embed)
 
+
 @bot.command(brief='Recommends a random anime', description='Returns a carefully curated list of anime for non-plebs.')
 @commands.cooldown(1, 4, commands.BucketType.guild)
 async def animerec(ctx):
@@ -123,7 +127,7 @@ async def animerec(ctx):
     anime_id = random.choice(anime_id_list)
 
     async with aiohttp.ClientSession() as session:
-        async with session.get("https://api.jikan.moe/v3/anime/{anime_id}".format(anime_id = anime_id)) as r:
+        async with session.get("https://api.jikan.moe/v3/anime/{anime_id}".format(anime_id=anime_id)) as r:
             if r.status == 200:
                 anime = await r.json()
 
