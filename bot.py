@@ -83,8 +83,34 @@ async def character(ctx):
     print(ctx.message.author.id)
     await ctx.send(embed=embed)
 
+@bot.command(brief='Recommends a random (popular) anime', description='Returns a list of anime for filthy casuals.')
+@commands.cooldown(1, 4, commands.BucketType.guild)
+async def recommend_anime_casul(ctx):
+
+    async with aiohttp.ClientSession() as session:
+        async with session.get("http://api.jikan.moe/v3/top/anime/{randint}".format(randint = str(random.randint(1, 20)))) as r:
+            if r.status == 200:
+                anime = await r.json()
+
+    anime_id = random.choice(list(anime['top'].values()))["mal_id"]
+
+    async with aiohttp.ClientSession() as session:
+        async with session.get("https://api.jikan.moe/v3/anime/{anime_id}".format(anime_id = anime_id)) as r:
+            if r.status == 200:
+                anime = await r.json()
+
+    embed = discord.Embed(title="Anime Recommendation")
+    embed.add_field(name="Name", value=anime['title'])
+    embed.add_field(name="Description", value=anime['synopsis'][0:1000])
+
+    print(anime['synopsis'])
+
+    embed.set_image(url=anime['image_url'])
+
+    await ctx.send(embed=embed)
+
 @bot.command(brief='Recommends a random anime', description='Returns a carefully curated list of anime for non-plebs.')
-@commands.cooldown(1, 4, commands.BucketType.user)
+@commands.cooldown(1, 4, commands.BucketType.guild)
 async def recommend_anime(ctx):
     anime_id_list = [
         "13125",
