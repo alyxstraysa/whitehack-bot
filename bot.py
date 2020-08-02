@@ -85,7 +85,7 @@ async def character(ctx):
 
 @bot.command(brief='Recommends a random (popular) anime', description='Returns a list of anime for filthy casuals.')
 @commands.cooldown(1, 4, commands.BucketType.guild)
-async def recommend_anime_casul(ctx):
+async def animerecfilthycasual(ctx):
 
     async with aiohttp.ClientSession() as session:
         api_call = "http://api.jikan.moe/v3/top/anime/{randint}".format(randint = str(random.randint(1, 20)))
@@ -113,7 +113,7 @@ async def recommend_anime_casul(ctx):
 
 @bot.command(brief='Recommends a random anime', description='Returns a carefully curated list of anime for non-plebs.')
 @commands.cooldown(1, 4, commands.BucketType.guild)
-async def recommend_anime(ctx):
+async def animerec(ctx):
     anime_id_list = [
         "13125",
         "10721",
