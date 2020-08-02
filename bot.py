@@ -145,7 +145,7 @@ async def animerec(ctx):
 @bot.command(brief='Rolls a 20 sided dice', description='Rolls a twenty sided dice')
 async def diceroll(ctx):
 
-    dice_roll = randint(1, 20)
+    dice_roll = random.randint(1, 20)
 
     embed = discord.Embed()
     embed.add_field(name="Roll", value=dice_roll)
