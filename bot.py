@@ -100,7 +100,7 @@ async def recommend_anime(ctx):
 
     embed = discord.Embed(title="Anime Recommendation")
     embed.add_field(name="Name", value=anime['title'])
-    embed.add_field(name="Description", value=anime['synopsis'])
+    embed.add_field(name="Description", value=anime['synopsis'][0:1000])
 
     print(anime['synopsis'])
 
