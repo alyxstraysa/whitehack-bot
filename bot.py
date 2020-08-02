@@ -84,6 +84,7 @@ async def character(ctx):
     await ctx.send(embed=embed)
 
 @bot.command(brief='Recommends a random anime', description='Returns a carefully curated list of anime for non-plebs.')
+@commands.cooldown(1, 4, commands.BucketType.user)
 async def recommend_anime(ctx):
     anime_id_list = [
         "13125",
