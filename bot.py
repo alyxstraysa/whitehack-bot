@@ -102,7 +102,7 @@ async def recommend_anime(ctx):
     embed.add_field(name="Name", value=anime['title'])
     embed.add_field(name="Description", value=anime['synopsis'])
 
-    embed.set_image(anime['image_url'])
+    embed.set_image(url=anime['image_url'])
 
     await ctx.send(embed=embed)
 
