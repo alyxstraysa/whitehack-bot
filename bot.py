@@ -299,10 +299,6 @@ async def isjtdiamondyet(ctx):
                 user_info = await r.json()
                 print(user_info)
     
-                if user_info['tier'] == 'Diamond':
-                    await ctx.send("He has made it to the promised land!")
-                else:
-                    await ctx.send("The current rank is {tier} {rank}".format(tier=user_info['tier'], rank=user_info['rank']))
+    await ctx.send("The current rank is {tier} {rank}".format(tier=user_info['tier'], rank=user_info['rank']))
         
-    
 bot.run(TOKEN)
