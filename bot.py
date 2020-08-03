@@ -297,8 +297,8 @@ async def isjtdiamondyet(ctx):
         async with session.get("https://na1.api.riotgames.com/lol/league/v4/entries/by-summoner/{account_id}?api_key=={rito_api_token}".format(account_id=accountId, rito_api_token=rito_api_token)) as r:
             if r.status == 200:
                 user_info = await r.json()
+                print(user_info)
     
-    print(user_info)
     if user_info['tier'] == 'Diamond':
         await ctx.send("He has made it to the promised land!")
     else:
