@@ -285,4 +285,22 @@ async def leaguematch(ctx):
     else:
         await ctx.send("Not enough users online!")
 
+@bot.command()
+async def isjtdiamondyet(ctx):
+    async with aiohttp.ClientSession() as session:
+        async with session.get("https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/{username}?api_key={rito_api_token}".format(username=username, rito_api_token=rito_api_token)) as r:
+            if r.status == 200:
+                user = await r.json()
+                accountId = user['id']
+
+        async with session.get("ttps://na1.api.riotgames.com/lol/league/v4/entries/by-summoner/{account_id}?api_key=={rito_api_token}".format(account_id=accountId, rito_api_token=rito_api_token)) as r:
+            if r.status == 200:
+                user_info = await r.json()
+    
+    print(user_info)
+    if user_info['tier'] == 'Diamond':
+        await ctx.send("He has made it to the promised land!")
+    else:
+        await ctx.send("The current rank is {tier} {rank}".format(tier=user_info['tier'], rank=user_info['rank']))
+    
 bot.run(TOKEN)
