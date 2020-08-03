@@ -287,6 +287,8 @@ async def leaguematch(ctx):
 
 @bot.command()
 async def isjtdiamondyet(ctx):
+    username = "Fetri"
+    
     async with aiohttp.ClientSession() as session:
         async with session.get("https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/{username}?api_key={rito_api_token}".format(username=username, rito_api_token=rito_api_token)) as r:
             if r.status == 200:
