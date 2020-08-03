@@ -1,3 +1,11 @@
+import os
+import discord
+import requests
+from discord.ext import commands
+import aiohttp
+import psycopg2
+import random
+import re
 
 @bot.command()
 async def intcheck(ctx, username):
