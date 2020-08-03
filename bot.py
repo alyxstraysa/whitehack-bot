@@ -8,8 +8,6 @@ import aiohttp
 import psycopg2
 import random
 import re
-from whitehackcommands import *
-from leaguecommands import *
 
 ON_HEROKU = 'ON_HEROKU' in os.environ
 
@@ -286,5 +284,5 @@ async def leaguematch(ctx):
 
     else:
         await ctx.send("Not enough users online!")
-        
+
 bot.run(TOKEN)
