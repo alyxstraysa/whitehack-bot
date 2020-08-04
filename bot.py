@@ -298,7 +298,7 @@ async def isjtdiamondyet(ctx):
             if r.status == 200:
                 user_info = await r.json()
     
-    print(user_info)
+        print(user_info)
     
     await ctx.send("The current rank is {tier} {rank}".format(tier=user_info['tier'], rank=user_info['rank']))
         
