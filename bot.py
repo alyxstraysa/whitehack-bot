@@ -115,7 +115,7 @@ async def animerecfilthycasual(ctx):
 
 
 @bot.command(brief='Recommends a random anime', description='Returns a carefully curated list of anime for non-plebs.')
-@commands.cooldown(1, 4, commands.BucketType.guild)
+@commands.cooldown(1, 4)
 async def animerec(ctx):
     anime_id_list = [
         "13125",
@@ -297,7 +297,8 @@ async def isjtdiamondyet(ctx):
         async with session.get("https://na1.api.riotgames.com/lol/league/v4/entries/by-summoner/{account_id}?api_key=={rito_api_token}".format(account_id=accountId, rito_api_token=rito_api_token)) as r:
             if r.status == 200:
                 user_info = await r.json()
-                print(user_info)
+    
+    print(user_info)
     
     await ctx.send("The current rank is {tier} {rank}".format(tier=user_info['tier'], rank=user_info['rank']))
         
