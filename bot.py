@@ -129,6 +129,11 @@ async def animerec(ctx):
         async with session.get("https://api.jikan.moe/v3/anime/{anime_id}".format(anime_id=anime_id)) as r:
             if r.status == 200:
                 anime = await r.json()
+            else:
+                print("There is an error with the anime API!")
+                import requests
+                r = requests.get("https://api.jikan.moe/v3/anime/{anime_id}".format(anime_id=anime_id))
+                print(r.text)
 
     embed = discord.Embed(title="Anime Recommendation")
     embed.add_field(name="Name", value=anime['title'])
@@ -301,6 +306,6 @@ async def isjtdiamondyet(ctx):
     if user_info[0]['tier'] == "DIAMOND":
         await ctx.send("He has reached the promise land!")
     else:
-        await ctx.send("Crittlestick's current rank is {tier}:{rank}".format(tier=user_info[0]['tier'], rank=user_info[0]['rank']))
+        await ctx.send("Crittlestick's current rank is {tier} : {rank}".format(tier=user_info[0]['tier'], rank=user_info[0]['rank']))
         
 bot.run(TOKEN)
