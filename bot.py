@@ -285,7 +285,7 @@ async def leaguematch(ctx):
     else:
         await ctx.send("Not enough users online!")
 
-@bot.command()
+@bot.command(brief='Checks Fetri\'s current LP', description='Calls the Riot API to fetch Fetri\'s current LP and Elo')
 async def isjtdiamondyet(ctx):
     
     async with aiohttp.ClientSession() as session:
