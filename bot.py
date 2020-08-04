@@ -289,17 +289,18 @@ async def leaguematch(ctx):
 async def isjtdiamondyet(ctx):
     
     async with aiohttp.ClientSession() as session:
-        async with session.get("https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/Fetri?api_key={rito_api_token}".format(rito_api_token=rito_api_token)) as r:
+        # async with session.get("https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/Fetri?api_key={rito_api_token}".format(rito_api_token=rito_api_token)) as r:
+        #     if r.status == 200:
+        #         user = await r.json()
+        #         accountId = user['id']
+               
+        async with session.get("https://na1.api.riotgames.com/lol/league/v4/entries/by-summoner/OSWsoa-shNeD-hop8ypzwy_VCt75f3E4LRIByYFALwpvBGo?api_key=={rito_api_token}".format(rito_api_token=rito_api_token)) as r:
             if r.status == 200:
-                user = await r.json()
-                accountId = user['id']
-                print(accountId)
-                print("https://na1.api.riotgames.com/lol/league/v4/entries/by-summoner/{account_id}?api_key=={rito_api_token}".format(account_id=accountId, rito_api_token=rito_api_token))
+                user_info = await r.json()
 
-        async with session.get("https://na1.api.riotgames.com/lol/league/v4/entries/by-summoner/{account_id}?api_key=={rito_api_token}".format(account_id=accountId, rito_api_token=rito_api_token)) as r:
-            if r.status == 200:
-                retrieve_user_info = await r.json()
-
-    await ctx.send("The current rank is {tier} {rank}".format(tier=retrieve_user_info['tier'], rank=retrieve_user_info['rank']))
+    if user_info[0]['tier'] == "DIAMOND":
+        await ctx.send("He has reached the promise land!")
+    else:
+        await ctx.send("The current rank is {tier} {rank}".format(tier=user_info[0]['tier'], rank=user_info[0]['rank']))
         
 bot.run(TOKEN)
