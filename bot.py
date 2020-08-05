@@ -64,7 +64,7 @@ async def on_message(message):
     elif "yes" in message.content.lower():
         await message.channel.send("https://imgur.com/l5irxe8")
     
-    elif "no" in message.content.lower():
+    elif "no" == message.content.lower():
         await message.channel.send("https://imgur.com/zJSVH1g")
 
     await bot.process_commands(message)
