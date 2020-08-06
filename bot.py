@@ -61,6 +61,9 @@ async def on_message(message):
     elif re.search(r'WA+H', message.content) is not None:
         await message.channel.send("https://tenor.com/view/dance-waluigi-mario-meme-gif-5329543")
 
+    elif "awoo" in message.content.lower():
+        await message.channel.send("https://i3.kym-cdn.com/photos/images/original/000/910/542/1e8.jpg")
+
     elif "jojo yes" == message.content.lower():
         await message.channel.send("https://imgur.com/l5irxe8")
     
