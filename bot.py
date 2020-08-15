@@ -70,6 +70,9 @@ async def on_message(message):
     elif "jojo no" == message.content.lower():
         await message.channel.send("https://imgur.com/zJSVH1g")
 
+    elif "bjergface" == message.content.lower():
+        await message.channel.send("https://imgur.com/N5Ig96t")
+
     await bot.process_commands(message)
 
 
