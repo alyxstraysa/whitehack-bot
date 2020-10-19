@@ -52,7 +52,10 @@ async def on_message(message):
     elif "Justin" in message.content:
         await message.channel.send("Tarkov is not a real game.")
 
-    elif "iron" in message.content:
+    elif "BANNED" == message.content:
+        await message.channel.send("https://i.imgur.com/rarpoUg.mp4")
+
+    elif "iron" == message.content:
         await message.channel.send("You mean elo heaven?")
 
     elif re.search(r'wa+h', message.content) is not None:
