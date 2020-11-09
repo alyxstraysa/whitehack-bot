@@ -79,6 +79,9 @@ async def on_message(message):
     elif "what?" == message.content:
         await message.channel.send("https://tenor.com/view/requiem-jojo-anime-shocked-giorno-gif-16966671")
 
+    elif "latom" == message.content:
+        await message.channel.send("https://i.imgur.com/b8NIxKN.png")
+
     await bot.process_commands(message)
 
 
