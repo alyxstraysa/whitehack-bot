@@ -257,7 +257,7 @@ async def inhouse_userinfo(ctx, member: discord.Member = None):
             SELECT * from participant_info
             where discord_id = (%s)
             """,
-            (re.sub('[^0-9]','', user_id),)
+            (user_id,)
     )
     results = cursor.fetchall()
 
