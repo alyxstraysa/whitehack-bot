@@ -224,7 +224,27 @@ async def inhouse_register(ctx, username, role):
 
 
 #implement method to change league name bound to your ID
-   
+@bot.command(description='Change your League username to something else in the inhouse.')
+async def inhouse_changeid(ctx, username):
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require',
+                            database=DATABASE, user=USER, password=PASSWORD)
+    cursor = conn.cursor()
+
+    #check if user in database
+    cursor.execute(
+            """
+            UPDATE participant_info
+            SET league_name = (%s)
+            where discord_id = (%s)
+            """,
+            (username, ctx.message.author.id)
+    )
+
+    conn.commit()
+    conn.close()
+
+    await ctx.send("League name updated!")
+
 @bot.command()
 async def inhouse_userinfo(ctx, member: discord.Member = None):
     user_id = member.id or ctx.author.id
