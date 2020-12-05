@@ -227,7 +227,7 @@ async def inhouse_register(ctx, username, role):
    
 @bot.command()
 async def inhouse_userinfo(ctx, member: discord.Member = None):
-    user = member.mention or ctx.author.mention
+    user_id = member.id or ctx.author.id
     conn = psycopg2.connect(DATABASE_URL, sslmode='require',
                             database=DATABASE, user=USER, password=PASSWORD)
 
@@ -237,7 +237,7 @@ async def inhouse_userinfo(ctx, member: discord.Member = None):
             SELECT * from participant_info
             where discord_id = (%s)
             """,
-            (re.sub('[^0-9]','', user),)
+            (re.sub('[^0-9]','', user_id),)
     )
     results = cursor.fetchall()
 
