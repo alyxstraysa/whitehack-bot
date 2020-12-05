@@ -207,7 +207,7 @@ async def inhouse_register(ctx, username, role):
         await ctx.send("Sorry, it looks like you've already registered for the inhouse.")
     else:
         async with aiohttp.ClientSession() as session:
-            async with session.get("https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/{username}?api_key={rito_api_token}".format(username=username, rito_api_token=rito_api_token)) as r:
+            async with session.get("https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/Fetri?api_key={rito_api_token}".format(rito_api_token=rito_api_token)) as r:
                 if r.status == 200:
                     cursor.execute(
                         """
@@ -218,16 +218,22 @@ async def inhouse_register(ctx, username, role):
                         (username, role, ctx.message.author.id)
                     )
 
+<<<<<<< Updated upstream
+    conn.commit()
+    conn.close()
+=======
         await ctx.send("Thank you for registering!.")
 
         conn.commit()
         conn.close()
+>>>>>>> Stashed changes
 
 
 #implement method to change league name bound to your ID
    
 @bot.command()
-async def inhouse_userinfo(ctx, user):
+async def inhouse_userinfo(ctx, member: discord.Member = None):
+    user = member or ctx.author
     conn = psycopg2.connect(DATABASE_URL, sslmode='require',
                             database=DATABASE, user=USER, password=PASSWORD)
 
