@@ -206,17 +206,20 @@ async def inhouse_register(ctx, username, role):
     if len(cursor.fetchall()) > 0:
         await ctx.send("Sorry, it looks like you've already registered for the inhouse.")
     else:
-        cursor.execute(
-            """
-            INSERT INTO participant_info VALUES
-                (%s, %s, %s)
-            ;
-            """,
-            (username, role, ctx.message.author.id)
-        )
+        async with aiohttp.ClientSession() as session:
+            async with session.get("https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/Fetri?api_key={rito_api_token}".format(rito_api_token=rito_api_token)) as r:
+                if r.status == 200:
+                    cursor.execute(
+                        """
+                        INSERT INTO participant_info VALUES
+                            (%s, %s, %s)
+                        ;
+                        """,
+                        (username, role, ctx.message.author.id)
+                    )
 
-        conn.commit()
-        conn.close()
+    conn.commit()
+    conn.close()
 
     
 @bot.command()
