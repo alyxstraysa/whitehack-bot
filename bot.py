@@ -175,23 +175,75 @@ async def diceroll(ctx):
     await ctx.send(embed=embed)
 
 
-## league commands
-@bot.command()
-async def inhouse_userinfo(ctx, username):
+## league inhouse commands
+@bot.command(description='Sends the date of the next inhouse')
+async def inhouse_nextgame(ctx):
+    await ctx.send("The next inhouse is 12/5/2020! Hope to see you there!")
+
+@bot.command(description='Shows the inhouse leaderboard.')
+async def inhouse_leaderboard(ctx):
+    pass
+
+@bot.command(description='Register for the inhouse. Requires two arguments, your League username and your role (ADC, Mid, Support, Top, Jungle).')
+async def inhouse_register(ctx, username, role):
     conn = psycopg2.connect(DATABASE_URL, sslmode='require',
                             database=DATABASE, user=USER, password=PASSWORD)
+    cursor = conn.cursor()
+
+    #check if user in database
+    cursor.execute(
+            """
+            SELECT * from participant_info
+            where discord_id = (%s)
+            """,
+            (ctx.message.author.id,)
+    )
+    
+    if role not in ['ADC', 'Mid', 'Support', 'Top', 'Jungle', 'Dog']:
+        await ctx.send("Sorry, we don't recognize that role.")
+        return
+
+    if len(cursor.fetchall()) > 0:
+        await ctx.send("Sorry, it looks like you've already registered for the inhouse.")
+    else:
+        cursor.execute(
+            """
+            INSERT INTO participant_info VALUES
+                (%s, %s, %s)
+            ;
+            """,
+            (username, role, ctx.message.author.id)
+        )
+
+        conn.commit()
+        conn.close()
+
+    
+@bot.command()
+async def inhouse_userinfo(ctx, user):
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require',
+                            database=DATABASE, user=USER, password=PASSWORD)
+
     cursor = conn.cursor()
     cursor.execute(
             """
             SELECT * from participant_info
-            where league_name = (%s)
+            where discord_id = (%s)
             """,
-            (username,)
+            (re.sub('[^0-9]','', user),)
     )
     results = cursor.fetchall()
 
-    await ctx.send("League ID: {league_id} | Main Role: {role}".format(league_id = results[0][0], role=results[0][1]))
-    
+    if len(results) == 0:
+        await ctx.send("There is no user registered with that account.")
+        return
+    else:
+        embed = discord.Embed()
+        embed.add_field(name="League ID", value=results[0][0], inline=False)
+        embed.add_field(name="Role ID", value=results[0][1], inline=False)
+
+        await ctx.send(embed=embed)
+
     conn.commit()
     conn.close()
 
