@@ -218,10 +218,19 @@ async def inhouse_register(ctx, username, role):
                         (username, role, ctx.message.author.id)
                     )
 
+<<<<<<< Updated upstream
     conn.commit()
     conn.close()
+=======
+        await ctx.send("Thank you for registering!.")
 
-    
+        conn.commit()
+        conn.close()
+>>>>>>> Stashed changes
+
+
+#implement method to change league name bound to your ID
+   
 @bot.command()
 async def inhouse_userinfo(ctx, user):
     conn = psycopg2.connect(DATABASE_URL, sslmode='require',
