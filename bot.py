@@ -219,8 +219,11 @@ async def inhouse_register(ctx, username, role):
                     )
 
                     await ctx.send("Thank you for registering!")
-                    conn.commit()
-                    conn.close()
+                else:
+                    await ctx.send("Sorry, but we can't find that league username!")
+                    
+    conn.commit()
+    conn.close()
 
 
 #implement method to change league name bound to your ID
