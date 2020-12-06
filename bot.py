@@ -192,7 +192,11 @@ async def inhouse_nextgame(ctx):
 
 @bot.command(description='Shows the inhouse leaderboard.')
 async def inhouse_leaderboard(ctx):
-    pass
+    await ctx.send("TheYelloBoi has the most wins with 1000 wins.")
+
+    await ctx.send("SkyPangoro has the most kills with 1000 kills.")
+
+    await ctx.send("CornTurtle8 is the biggest animale and the winner of the Catto Award.")
 
 @bot.command(description='Register for the inhouse. Requires two arguments, your League username and your role (ADC, Mid, Support, Top, Jungle).')
 async def inhouse_register(ctx, username, role):
