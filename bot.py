@@ -176,6 +176,16 @@ async def diceroll(ctx):
 
 
 ## league inhouse commands
+# function to check league username
+async def check_username(username):
+    async with aiohttp.ClientSession() as session:
+        async with session.get("https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/{username}?api_key={rito_api_token}".format(username=username, rito_api_token=rito_api_token)) as r:
+            if r.status == 200:
+                return True
+            else:
+                return False
+
+            
 @bot.command(description='Sends the date of the next inhouse')
 async def inhouse_nextgame(ctx):
     await ctx.send("The next inhouse is 12/5/2020! Hope to see you there!")
@@ -206,21 +216,20 @@ async def inhouse_register(ctx, username, role):
     if len(cursor.fetchall()) > 0:
         await ctx.send("Sorry, it looks like you've already registered for the inhouse.")
     else:
-        async with aiohttp.ClientSession() as session:
-            async with session.get("https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/{username}?api_key={rito_api_token}".format(username=username, rito_api_token=rito_api_token)) as r:
-                if r.status == 200:
-                    cursor.execute(
-                        """
-                        INSERT INTO participant_info VALUES
-                            (%s, %s, %s)
-                        ;
-                        """,
-                        (username, role, ctx.message.author.id)
-                    )
-
-                    await ctx.send("Thank you for registering!")
-                else:
-                    await ctx.send("Sorry, but we can't find that league username!")
+        valid = check_username(username)
+        if valid:
+            cursor.execute(
+                """
+                INSERT INTO participant_info VALUES
+                    (%s, %s, %s)
+                ;
+                """,
+                (username, role, ctx.message.author.id)
+            )
+            await ctx.send("Thank you for registering!")
+            
+        else:
+            await ctx.send("Sorry, but we can't find that league username!")
                     
     conn.commit()
     conn.close()
@@ -232,21 +241,26 @@ async def inhouse_changeid(ctx, username):
     conn = psycopg2.connect(DATABASE_URL, sslmode='require',
                             database=DATABASE, user=USER, password=PASSWORD)
     cursor = conn.cursor()
-
-    #check if user in database
-    cursor.execute(
+    
+    valid = check_username(username)
+    if valid:
+        #check if user in database
+        cursor.execute(
             """
             UPDATE participant_info
             SET league_name = (%s)
             where discord_id = (%s)
             """,
             (username, ctx.message.author.id)
-    )
+        )
+        await ctx.send("League name updated!")
+    
+    else:
+        await ctx.send("Sorry, but we can't find that league username!")
 
     conn.commit()
     conn.close()
-
-    await ctx.send("League name updated!")
+    
 
 @bot.command()
 async def inhouse_userinfo(ctx, member: discord.Member = None):
