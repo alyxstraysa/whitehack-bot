@@ -84,6 +84,9 @@ async def on_message(message):
 
     await bot.process_commands(message)
 
+@bot.command(brief='Send to horny jail', description='Bonks a degenerate in need of bonking')
+async def bonk(ctx, username):
+    await ctx.send("https://i.imgur.com/t1a9akh.gif")
 
 @bot.command(brief='Shows the requested Whitehack Character', description='Returns a registered www.praisethetsun.com Whitehack character if one such character is registered')
 async def character(ctx):
