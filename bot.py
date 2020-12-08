@@ -193,21 +193,27 @@ async def check_username(username):
             else:
                 return False
 
-            
-@bot.command(description='Sends the date of the next inhouse')
-async def inhouse_nextgame(ctx):
+
+@bot.group(nanme='inhouse', brief='Command group for inhouses.', description='Command group for CF inhouses.')
+async def inhouse(ctx):
+	if ctx.invoked_subcommand is None:
+		await ctx.send("Try `wh help inhouse` for all subcommands!")
+
+
+@inhouse.command(description='Sends the date of the next inhouse')
+async def nextgame(ctx):
     await ctx.send("The next inhouse is 12/5/2020! Hope to see you there!")
 
-@bot.command(description='Shows the inhouse leaderboard.')
-async def inhouse_leaderboard(ctx):
+@inhouse.command(description='Shows the inhouse leaderboard.')
+async def leaderboard(ctx):
     await ctx.send("TheYelloBoi has the most wins with 1000 wins.")
 
     await ctx.send("SkyPangoro has the most kills with 1000 kills.")
 
     await ctx.send("CornTurtle8 is the biggest animale and the winner of the Catto Award.")
 
-@bot.command(description='Register for the inhouse. Requires two arguments, your League username and your role (ADC, Mid, Support, Top, Jungle).')
-async def inhouse_register(ctx, username, role):
+@inhouse.command(description='Register for the inhouse. Requires two arguments, your League username and your role (ADC, Mid, Support, Top, Jungle).')
+async def register(ctx, username, role):
     conn = psycopg2.connect(DATABASE_URL, sslmode='require',
                             database=DATABASE, user=USER, password=PASSWORD)
     cursor = conn.cursor()
@@ -248,8 +254,8 @@ async def inhouse_register(ctx, username, role):
 
 
 #implement method to change league name bound to your ID
-@bot.command(description='Change your League username to something else in the inhouse.')
-async def inhouse_changeid(ctx, username):
+@inhouse.command(description='Change your League username to something else in the inhouse.')
+async def changeid(ctx, username):
     conn = psycopg2.connect(DATABASE_URL, sslmode='require',
                             database=DATABASE, user=USER, password=PASSWORD)
     cursor = conn.cursor()
@@ -274,8 +280,8 @@ async def inhouse_changeid(ctx, username):
     conn.close()
     
 
-@bot.command()
-async def inhouse_userinfo(ctx, member: discord.Member = None):
+@inhouse.command()
+async def userinfo(ctx, member: discord.Member = None):
     user_id = member.id or ctx.author.id
     conn = psycopg2.connect(DATABASE_URL, sslmode='require',
                             database=DATABASE, user=USER, password=PASSWORD)
