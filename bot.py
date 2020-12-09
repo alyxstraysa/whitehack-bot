@@ -328,5 +328,29 @@ async def isjtdiamondyet(ctx):
         await ctx.send("He has reached the promise land!")
     else:
         await ctx.send("Crittlestick's current rank is {tier} : {rank}".format(tier=user_info[0]['tier'], rank=user_info[0]['rank']))
+
+#waifu voting
+@bot.group(nanme='waifu', brief='Command group for waifus.', description='Command group for waifus.')
+async def waifu(ctx):
+	if ctx.invoked_subcommand is None:
+		await ctx.send("Try `wh help waifu` for all subcommands!")
+
+
+@waifu.command(brief='Vote for a waifu', description='Determine the best anime waifu.')
+@commands.cooldown(1, 86400, "member")
+async def vote(ctx):
+    await ctx.send("Testing rate limit")
+
+async def nominate(ctx):
+    pass
+
+@vote.error
+async def vote_error(ctx, error):
+    if isinstance(error, commands.CommandOnCooldown):
+        msg = 'This command is ratelimited, please try again in {:.2f}s'.format(error.retry_after)
+        await ctx.send(msg)
+    else:
+        raise error
+
         
 bot.run(TOKEN)
