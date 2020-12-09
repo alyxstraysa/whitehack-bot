@@ -402,7 +402,7 @@ async def info(ctx, *args):
     embed = discord.Embed()
     
     embed.add_field(name="Name", value=waifu, inline=False)
-    embed.add_field(name="Description", value=description, inline=False)
+    #embed.add_field(name="Description", value=description, inline=False)
     embed.set_image(url=image)
 
     await ctx.send(embed=embed)
