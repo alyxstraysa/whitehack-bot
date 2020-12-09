@@ -1,5 +1,4 @@
 # bot.py
-
 import os
 import discord
 from discord.ext.commands.cooldowns import BucketType
@@ -8,6 +7,7 @@ from discord.ext import commands
 import aiohttp
 import psycopg2
 import random
+from bs4 import BeautifulSoup
 import re
 
 ON_HEROKU = 'ON_HEROKU' in os.environ
@@ -370,6 +370,43 @@ async def vote(ctx, *args):
     conn.commit()
     conn.close()
 
+@waifu.command(brief='Shows waifu info', description='Shows waifu info from the respective wikia')
+async def info(ctx, *args):
+    waifu = " ".join(args[:])
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require',
+                            database=DATABASE, user=USER, password=PASSWORD)
+    cursor = conn.cursor()
+    cursor.execute(
+            """
+            select wikilink from waifu
+            where waifu_name = (%s);
+            """, (waifu, )
+    )
+
+    def create_anime_embedding(anime_webpage):
+        page = requests.get(anime_webpage)
+        soup = BeautifulSoup(page.content, 'html.parser')
+
+        description = soup.find_all(property="og:description")
+        description = str(description)
+        description = re.findall(r'"(.*?)"', description)[0]
+
+        image = soup.find_all(property="og:image")
+        image = str(image)
+        image = re.findall(r'"(.*?)"', image)[0]
+
+        return description, image
+
+    description, image = create_anime_embedding(cursor.fetchone()[0])
+
+    embed = discord.Embed()
+    
+    embed.add_field(name="Name", value=waifu, inline=False)
+    embed.add_field(name="Description", value=description, inline=False)
+    embed.set_image(url=image)
+
+    await ctx.send(embed=embed)
+
 @waifu.command(brief='Shows waifu leaderboard', description='In the waifu battle, only one person can be the winner.')
 async def leaderboard(ctx):
     conn = psycopg2.connect(DATABASE_URL, sslmode='require',
@@ -412,6 +449,8 @@ async def vote_error(ctx, error):
         await ctx.send(msg)
     else:
         raise error
+
+
 
         
 bot.run(TOKEN)
