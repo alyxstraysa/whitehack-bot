@@ -2,6 +2,7 @@
 
 import os
 import discord
+from discord.ext.commands.cooldowns import BucketType
 import requests
 from discord.ext import commands
 import aiohttp
@@ -337,9 +338,69 @@ async def waifu(ctx):
 
 
 @waifu.command(brief='Vote for a waifu', description='Determine the best anime waifu.')
-@commands.cooldown(1, 86400, "member")
-async def vote(ctx):
-    await ctx.send("Testing rate limit")
+@commands.cooldown(1, 86400, BucketType.member)
+async def vote(ctx, *args):
+    waifu = " ".join(args[:])
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require',
+                            database=DATABASE, user=USER, password=PASSWORD)
+    cursor = conn.cursor()
+    cursor.execute(
+            """
+            select waifu_name from waifu;
+            """
+    )
+
+    waifu_list = [name[0] for name in cursor.fetchall()]
+    print(waifu_list)
+
+    if waifu not in waifu_list:
+        vote.reset_cooldown(ctx)
+        await ctx.send("Sorry, we couldn't find your waifu.")
+    else:
+        cursor.execute(
+            """
+            UPDATE waifu 
+            SET Votes = Votes + 1
+            WHERE waifu_name = (%s);
+            """,
+            (waifu,)
+        )
+        await ctx.send("Thank you for voting!")
+
+    conn.commit()
+    conn.close()
+
+@waifu.command(brief='Shows waifu leaderboard', description='In the waifu battle, only one person can be the winner.')
+async def leaderboard(ctx):
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require',
+                            database=DATABASE, user=USER, password=PASSWORD)
+    cursor = conn.cursor()
+    cursor.execute(
+            """
+            select * from waifu
+            order by votes desc
+            limit 3;
+            """
+    )
+    
+    results = cursor.fetchall()
+
+    embed = discord.Embed()
+    
+    embed.add_field(name="Name", value=results[0][0], inline=True)
+    embed.add_field(name="Anime", value=results[0][1], inline=True)
+    embed.add_field(name="Votes", value=results[0][2], inline=True)
+    embed.add_field(name="Name", value=results[1][0], inline=True)
+    embed.add_field(name="Anime", value=results[1][1], inline=True)
+    embed.add_field(name="Votes", value=results[1][2], inline=True)
+    embed.add_field(name="Name", value=results[2][0], inline=True)
+    embed.add_field(name="Anime", value=results[2][1], inline=True)
+    embed.add_field(name="Votes", value=results[2][2], inline=True)
+
+    await ctx.send(embed=embed)
+
+    conn.commit()
+    conn.close()
 
 async def nominate(ctx):
     pass
@@ -347,7 +408,7 @@ async def nominate(ctx):
 @vote.error
 async def vote_error(ctx, error):
     if isinstance(error, commands.CommandOnCooldown):
-        msg = 'This command is ratelimited, please try again in {:.2f}s'.format(error.retry_after)
+        msg = 'This command is rate limited, please try again in {:.0f} hours'.format(error.retry_after / 60 / 60)
         await ctx.send(msg)
     else:
         raise error
