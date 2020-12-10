@@ -407,6 +407,31 @@ async def info(ctx, *args):
 
     await ctx.send(embed=embed)
 
+@waifu.command(brief = 'Shows waifu list', description='Shows the waifus you can vote for')
+async def list(ctx):
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require',
+                            database=DATABASE, user=USER, password=PASSWORD)
+    cursor = conn.cursor()
+    cursor.execute(
+            """
+            select * from waifu;
+            """
+    )
+
+    waifus = [waifu for waifu, _, _, _, in cursor.fetchall()]
+
+    msg = """
+    ```
+    \n
+    {wf}
+    ```
+    """.format(wf="\n\t".join(waifus))
+
+    print(msg)
+    await ctx.send(msg)
+    conn.commit()
+    conn.close()
+
 @waifu.command(brief='Shows waifu leaderboard', description='In the waifu battle, only one person can be the winner.')
 async def leaderboard(ctx):
     conn = psycopg2.connect(DATABASE_URL, sslmode='require',
