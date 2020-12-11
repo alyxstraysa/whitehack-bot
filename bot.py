@@ -203,15 +203,17 @@ async def inhouse(ctx):
 
 @inhouse.command(description='Sends the date of the next inhouse')
 async def nextgame(ctx):
-    await ctx.send("The next inhouse is 12/5/2020! Hope to see you there!")
+    await ctx.send("The next inhouse is 12/11/2020 and 12/12/2020! Hope to see you there!")
 
 @inhouse.command(description='Shows the inhouse leaderboard.')
 async def leaderboard(ctx):
-    await ctx.send("TheYelloBoi has the most wins with 1000 wins.")
-
-    await ctx.send("SkyPangoro has the most kills with 1000 kills.")
-
-    await ctx.send("CornTurtle8 is the biggest animale and the winner of the Catto Award.")
+    await ctx.send(
+    """
+    TheYelloBoi has the most wins with 1000 wins. \n
+    SkyPangoro has the most kills with 1000 kills. \n
+    CornTurtle8 is the biggest animale and the winner of the Catto Award.
+    """
+    )
 
 @inhouse.command(description='Register for the inhouse. Requires two arguments, your League username and your role (ADC, Mid, Support, Top, Jungle).')
 async def register(ctx, username, role):
