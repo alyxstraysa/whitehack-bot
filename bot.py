@@ -70,7 +70,7 @@ async def on_message(message):
 
     elif "jojo yes" == message.content.lower():
         await message.channel.send("https://imgur.com/l5irxe8")
-    
+
     elif "jojo no" == message.content.lower():
         await message.channel.send("https://imgur.com/zJSVH1g")
 
@@ -83,16 +83,23 @@ async def on_message(message):
     elif "latom" == message.content:
         await message.channel.send("https://i.imgur.com/b8NIxKN.png")
 
+    elif "rerorero" == message.content:
+        await message.channel.send("https://media.giphy.com/media/aYVhZCKdtXZSw/giphy.gif")
+
     await bot.process_commands(message)
 
-#define cogs
+# define cogs
+
+
 class anime(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+
 @bot.command(brief='Send to horny jail', description='Bonks a degenerate in need of bonking')
 async def bonk(ctx, username):
     await ctx.send("https://i.imgur.com/t1a9akh.gif")
+
 
 @bot.command(brief='Shows the requested Whitehack Character', description='Returns a registered www.praisethetsun.com Whitehack character if one such character is registered')
 async def character(ctx):
@@ -159,7 +166,8 @@ async def animerec(ctx):
             else:
                 print("There is an error with the anime API!")
                 import requests
-                r = requests.get("https://api.jikan.moe/v3/anime/{anime_id}".format(anime_id=anime_id))
+                r = requests.get(
+                    "https://api.jikan.moe/v3/anime/{anime_id}".format(anime_id=anime_id))
                 print(r.text)
 
     embed = discord.Embed(title="Anime Recommendation")
@@ -184,7 +192,7 @@ async def diceroll(ctx):
     await ctx.send(embed=embed)
 
 
-## league inhouse commands
+# league inhouse commands
 # function to check league username
 async def check_username(username):
     async with aiohttp.ClientSession() as session:
@@ -197,23 +205,25 @@ async def check_username(username):
 
 @bot.group(nanme='inhouse', brief='Command group for inhouses.', description='Command group for CF inhouses.')
 async def inhouse(ctx):
-	if ctx.invoked_subcommand is None:
-		await ctx.send("Try `wh help inhouse` for all subcommands!")
+    if ctx.invoked_subcommand is None:
+        await ctx.send("Try `wh help inhouse` for all subcommands!")
 
 
 @inhouse.command(description='Sends the date of the next inhouse')
 async def nextgame(ctx):
     await ctx.send("The next inhouse is 12/11/2020 and 12/12/2020! Hope to see you there!")
 
+
 @inhouse.command(description='Shows the inhouse leaderboard.')
 async def leaderboard(ctx):
     await ctx.send(
-    """
+        """
     TheYelloBoi has the most wins with 1000 wins. \n
     SkyPangoro has the most kills with 1000 kills. \n
     CornTurtle8 is the biggest animale and the winner of the Catto Award.
     """
     )
+
 
 @inhouse.command(description='Register for the inhouse. Requires two arguments, your League username and your role (ADC, Mid, Support, Top, Jungle).')
 async def register(ctx, username, role):
@@ -221,15 +231,15 @@ async def register(ctx, username, role):
                             database=DATABASE, user=USER, password=PASSWORD)
     cursor = conn.cursor()
 
-    #check if user in database
+    # check if user in database
     cursor.execute(
-            """
+        """
             SELECT * from participant_info
             where discord_id = (%s)
             """,
-            (ctx.message.author.id,)
+        (ctx.message.author.id,)
     )
-    
+
     if role not in ['ADC', 'Mid', 'Support', 'Top', 'Jungle', 'Dog']:
         await ctx.send("Sorry, we don't recognize that role.")
         return
@@ -248,24 +258,24 @@ async def register(ctx, username, role):
                 (username, role, ctx.message.author.id)
             )
             await ctx.send("Thank you for registering!")
-            
+
         else:
             await ctx.send("Sorry, but we can't find that league username!")
-                    
+
     conn.commit()
     conn.close()
 
 
-#implement method to change league name bound to your ID
+# implement method to change league name bound to your ID
 @inhouse.command(description='Change your League username to something else in the inhouse.')
 async def changeid(ctx, username):
     conn = psycopg2.connect(DATABASE_URL, sslmode='require',
                             database=DATABASE, user=USER, password=PASSWORD)
     cursor = conn.cursor()
-    
+
     valid = check_username(username)
     if valid:
-        #check if user in database
+        # check if user in database
         cursor.execute(
             """
             UPDATE participant_info
@@ -275,13 +285,13 @@ async def changeid(ctx, username):
             (username, ctx.message.author.id)
         )
         await ctx.send("League name updated!")
-    
+
     else:
         await ctx.send("Sorry, but we can't find that league username!")
 
     conn.commit()
     conn.close()
-    
+
 
 @inhouse.command()
 async def userinfo(ctx, member: discord.Member = None):
@@ -291,11 +301,11 @@ async def userinfo(ctx, member: discord.Member = None):
 
     cursor = conn.cursor()
     cursor.execute(
-            """
+        """
             SELECT * from participant_info
             where discord_id = (%s)
             """,
-            (user_id,)
+        (user_id,)
     )
     results = cursor.fetchall()
 
@@ -313,16 +323,16 @@ async def userinfo(ctx, member: discord.Member = None):
     conn.close()
 
 
-#making fun of jonathan commands
+# making fun of jonathan commands
 @bot.command(brief='Checks Fetri\'s current LP', description='Calls the Riot API to fetch Fetri\'s current LP and Elo')
 async def isjtdiamondyet(ctx):
-    
+
     async with aiohttp.ClientSession() as session:
         # async with session.get("https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/Fetri?api_key={rito_api_token}".format(rito_api_token=rito_api_token)) as r:
         #     if r.status == 200:
         #         user = await r.json()
         #         accountId = user['id']
-               
+
         async with session.get("https://na1.api.riotgames.com/lol/league/v4/entries/by-summoner/jlKbXhBN5wSlfLzlLyGggV6W7PBJRULgC9__LMhtOuI9Roc?api_key={rito_api_token}".format(rito_api_token=rito_api_token)) as r:
             if r.status == 200:
                 user_info = await r.json()
@@ -332,11 +342,11 @@ async def isjtdiamondyet(ctx):
     else:
         await ctx.send("Crittlestick's current rank is {tier} : {rank}".format(tier=user_info[0]['tier'], rank=user_info[0]['rank']))
 
-#waifu voting
+# waifu voting
 @bot.group(nanme='waifu', brief='Command group for waifus.', description='Command group for waifus.')
 async def waifu(ctx):
-	if ctx.invoked_subcommand is None:
-		await ctx.send("Try `wh help waifu` for all subcommands!")
+    if ctx.invoked_subcommand is None:
+        await ctx.send("Try `wh help waifu` for all subcommands!")
 
 
 @waifu.command(brief='Vote for a waifu', description='Determine the best anime waifu.')
@@ -347,7 +357,7 @@ async def vote(ctx, *args):
                             database=DATABASE, user=USER, password=PASSWORD)
     cursor = conn.cursor()
     cursor.execute(
-            """
+        """
             select waifu_name from waifu;
             """
     )
@@ -372,6 +382,7 @@ async def vote(ctx, *args):
     conn.commit()
     conn.close()
 
+
 @waifu.command(brief='Shows waifu info', description='Shows waifu info from the respective wikia')
 async def info(ctx, *args):
     waifu = " ".join(args[:])
@@ -379,7 +390,7 @@ async def info(ctx, *args):
                             database=DATABASE, user=USER, password=PASSWORD)
     cursor = conn.cursor()
     cursor.execute(
-            """
+        """
             select wikilink from waifu
             where waifu_name = (%s);
             """, (waifu, )
@@ -402,20 +413,21 @@ async def info(ctx, *args):
     description, image = create_anime_embedding(cursor.fetchone()[0])
 
     embed = discord.Embed()
-    
+
     embed.add_field(name="Name", value=waifu, inline=False)
     #embed.add_field(name="Description", value=description, inline=False)
     embed.set_image(url=image)
 
     await ctx.send(embed=embed)
 
-@waifu.command(brief = 'Shows waifu list', description='Shows the waifus you can vote for')
+
+@waifu.command(brief='Shows waifu list', description='Shows the waifus you can vote for')
 async def list(ctx):
     conn = psycopg2.connect(DATABASE_URL, sslmode='require',
                             database=DATABASE, user=USER, password=PASSWORD)
     cursor = conn.cursor()
     cursor.execute(
-            """
+        """
             select * from waifu;
             """
     )
@@ -434,23 +446,24 @@ async def list(ctx):
     conn.commit()
     conn.close()
 
+
 @waifu.command(brief='Shows waifu leaderboard', description='In the waifu battle, only one person can be the winner.')
 async def leaderboard(ctx):
     conn = psycopg2.connect(DATABASE_URL, sslmode='require',
                             database=DATABASE, user=USER, password=PASSWORD)
     cursor = conn.cursor()
     cursor.execute(
-            """
+        """
             select * from waifu
             order by votes desc
             limit 3;
             """
     )
-    
+
     results = cursor.fetchall()
 
     embed = discord.Embed()
-    
+
     embed.add_field(name="Name", value=results[0][0], inline=True)
     embed.add_field(name="Anime", value=results[0][1], inline=True)
     embed.add_field(name="Votes", value=results[0][2], inline=True)
@@ -466,18 +479,19 @@ async def leaderboard(ctx):
     conn.commit()
     conn.close()
 
+
 async def nominate(ctx):
     pass
+
 
 @vote.error
 async def vote_error(ctx, error):
     if isinstance(error, commands.CommandOnCooldown):
-        msg = 'This command is rate limited, please try again in {:.0f} hours'.format(error.retry_after / 60 / 60)
+        msg = 'This command is rate limited, please try again in {:.0f} hours'.format(
+            error.retry_after / 60 / 60)
         await ctx.send(msg)
     else:
         raise error
 
 
-
-        
 bot.run(TOKEN)
