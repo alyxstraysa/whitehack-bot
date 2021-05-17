@@ -24,7 +24,7 @@ else:
     DATABASE = os.environ.get("DATABASE")
     DATABASE_URL = os.environ.get('DATABASE_URL')
 
-bot = commands.Bot(command_prefix='wh ')
+bot = commands.Bot(command_prefix='ka ')
 
 bot.description = "RPG management tool for the Whitehack RPG as well as various memes."
 
