@@ -50,9 +50,6 @@ async def on_message(message):
     if "JT" in message.content:
         await message.channel.send("You mean professional jungler WingedNinja2?")
 
-    elif "Justin" in message.content:
-        await message.channel.send("Tarkov is not a real game.")
-
     elif "BANNED" == message.content:
         await message.channel.send("https://i.imgur.com/rarpoUg.mp4")
 
@@ -85,6 +82,9 @@ async def on_message(message):
 
     elif "rerorero" == message.content:
         await message.channel.send("https://media.giphy.com/media/aYVhZCKdtXZSw/giphy.gif")
+
+    elif "EXILE" == message.content.upper():
+        await message.channel.send("https://cdn.discordapp.com/attachments/237359545058328577/841791249895653436/take_him_to_brazil.gif")
 
     await bot.process_commands(message)
 
