@@ -162,149 +162,149 @@ async def animerec(ctx):
     await ctx.send(embed=embed)
 
 #waifu commands
-@waifu.command(brief='Vote for a waifu', description='Determine the best anime waifu.')
-@commands.cooldown(1, 86400, BucketType.member)
-async def vote(ctx, *args):
-    waifu = " ".join(args[:])
-    conn = psycopg2.connect(DATABASE_URL, sslmode='require',
-                            database=DATABASE, user=USER, password=PASSWORD)
-    cursor = conn.cursor()
-    cursor.execute(
-        """
-            select waifu_name from waifu;
-            """
-    )
+# @waifu.command(brief='Vote for a waifu', description='Determine the best anime waifu.')
+# @commands.cooldown(1, 86400, BucketType.member)
+# async def vote(ctx, *args):
+#     waifu = " ".join(args[:])
+#     conn = psycopg2.connect(DATABASE_URL, sslmode='require',
+#                             database=DATABASE, user=USER, password=PASSWORD)
+#     cursor = conn.cursor()
+#     cursor.execute(
+#         """
+#             select waifu_name from waifu;
+#             """
+#     )
 
-    waifu_list = [name[0] for name in cursor.fetchall()]
-    print(waifu_list)
+#     waifu_list = [name[0] for name in cursor.fetchall()]
+#     print(waifu_list)
 
-    if waifu not in waifu_list:
-        vote.reset_cooldown(ctx)
-        await ctx.send("Sorry, we couldn't find your waifu.")
-    else:
-        cursor.execute(
-            """
-            UPDATE waifu 
-            SET Votes = Votes + 1
-            WHERE waifu_name = (%s);
-            """,
-            (waifu,)
-        )
-        await ctx.send("Thank you for voting!")
+#     if waifu not in waifu_list:
+#         vote.reset_cooldown(ctx)
+#         await ctx.send("Sorry, we couldn't find your waifu.")
+#     else:
+#         cursor.execute(
+#             """
+#             UPDATE waifu 
+#             SET Votes = Votes + 1
+#             WHERE waifu_name = (%s);
+#             """,
+#             (waifu,)
+#         )
+#         await ctx.send("Thank you for voting!")
 
-    conn.commit()
-    conn.close()
-
-
-@waifu.command(brief='Shows waifu info', description='Shows waifu info from the respective wikia')
-async def info(ctx, *args):
-    waifu = " ".join(args[:])
-    conn = psycopg2.connect(DATABASE_URL, sslmode='require',
-                            database=DATABASE, user=USER, password=PASSWORD)
-    cursor = conn.cursor()
-    cursor.execute(
-        """
-            select wikilink from waifu
-            where waifu_name = (%s);
-            """, (waifu, )
-    )
-
-    def create_anime_embedding(anime_webpage):
-        page = requests.get(anime_webpage)
-        soup = BeautifulSoup(page.content, 'html.parser')
-
-        description = soup.find_all(property="og:description")
-        description = str(description)
-        description = re.findall(r'"(.*?)"', description)[0]
-
-        image = soup.find_all(property="og:image")
-        image = str(image)
-        image = re.findall(r'"(.*?)"', image)[0]
-
-        return description, image
-
-    description, image = create_anime_embedding(cursor.fetchone()[0])
-
-    embed = discord.Embed()
-
-    embed.add_field(name="Name", value=waifu, inline=False)
-    #embed.add_field(name="Description", value=description, inline=False)
-    embed.set_image(url=image)
-
-    await ctx.send(embed=embed)
+#     conn.commit()
+#     conn.close()
 
 
-@waifu.command(brief='Shows waifu list', description='Shows the waifus you can vote for')
-async def list(ctx):
-    conn = psycopg2.connect(DATABASE_URL, sslmode='require',
-                            database=DATABASE, user=USER, password=PASSWORD)
-    cursor = conn.cursor()
-    cursor.execute(
-        """
-            select * from waifu;
-            """
-    )
+# @waifu.command(brief='Shows waifu info', description='Shows waifu info from the respective wikia')
+# async def info(ctx, *args):
+#     waifu = " ".join(args[:])
+#     conn = psycopg2.connect(DATABASE_URL, sslmode='require',
+#                             database=DATABASE, user=USER, password=PASSWORD)
+#     cursor = conn.cursor()
+#     cursor.execute(
+#         """
+#             select wikilink from waifu
+#             where waifu_name = (%s);
+#             """, (waifu, )
+#     )
 
-    waifus = [waifu for waifu, _, _, _, in cursor.fetchall()]
+#     def create_anime_embedding(anime_webpage):
+#         page = requests.get(anime_webpage)
+#         soup = BeautifulSoup(page.content, 'html.parser')
 
-    msg = """
-    ```
-    \n
-    {wf}
-    ```
-    """.format(wf="\n\t".join(waifus))
+#         description = soup.find_all(property="og:description")
+#         description = str(description)
+#         description = re.findall(r'"(.*?)"', description)[0]
 
-    print(msg)
-    await ctx.send(msg)
-    conn.commit()
-    conn.close()
+#         image = soup.find_all(property="og:image")
+#         image = str(image)
+#         image = re.findall(r'"(.*?)"', image)[0]
 
+#         return description, image
 
-@waifu.command(brief='Shows waifu leaderboard', description='In the waifu battle, only one person can be the winner.')
-async def leaderboard(ctx):
-    conn = psycopg2.connect(DATABASE_URL, sslmode='require',
-                            database=DATABASE, user=USER, password=PASSWORD)
-    cursor = conn.cursor()
-    cursor.execute(
-        """
-            select * from waifu
-            order by votes desc
-            limit 3;
-            """
-    )
+#     description, image = create_anime_embedding(cursor.fetchone()[0])
 
-    results = cursor.fetchall()
+#     embed = discord.Embed()
 
-    embed = discord.Embed()
+#     embed.add_field(name="Name", value=waifu, inline=False)
+#     #embed.add_field(name="Description", value=description, inline=False)
+#     embed.set_image(url=image)
 
-    embed.add_field(name="Name", value=results[0][0], inline=True)
-    embed.add_field(name="Anime", value=results[0][1], inline=True)
-    embed.add_field(name="Votes", value=results[0][2], inline=True)
-    embed.add_field(name="Name", value=results[1][0], inline=True)
-    embed.add_field(name="Anime", value=results[1][1], inline=True)
-    embed.add_field(name="Votes", value=results[1][2], inline=True)
-    embed.add_field(name="Name", value=results[2][0], inline=True)
-    embed.add_field(name="Anime", value=results[2][1], inline=True)
-    embed.add_field(name="Votes", value=results[2][2], inline=True)
-
-    await ctx.send(embed=embed)
-
-    conn.commit()
-    conn.close()
+#     await ctx.send(embed=embed)
 
 
-async def nominate(ctx):
-    pass
+# @waifu.command(brief='Shows waifu list', description='Shows the waifus you can vote for')
+# async def list(ctx):
+#     conn = psycopg2.connect(DATABASE_URL, sslmode='require',
+#                             database=DATABASE, user=USER, password=PASSWORD)
+#     cursor = conn.cursor()
+#     cursor.execute(
+#         """
+#             select * from waifu;
+#             """
+#     )
+
+#     waifus = [waifu for waifu, _, _, _, in cursor.fetchall()]
+
+#     msg = """
+#     ```
+#     \n
+#     {wf}
+#     ```
+#     """.format(wf="\n\t".join(waifus))
+
+#     print(msg)
+#     await ctx.send(msg)
+#     conn.commit()
+#     conn.close()
 
 
-@vote.error
-async def vote_error(ctx, error):
-    if isinstance(error, commands.CommandOnCooldown):
-        msg = 'This command is rate limited, please try again in {:.0f} hours'.format(
-            error.retry_after / 60 / 60)
-        await ctx.send(msg)
-    else:
-        raise error
+# @waifu.command(brief='Shows waifu leaderboard', description='In the waifu battle, only one person can be the winner.')
+# async def leaderboard(ctx):
+#     conn = psycopg2.connect(DATABASE_URL, sslmode='require',
+#                             database=DATABASE, user=USER, password=PASSWORD)
+#     cursor = conn.cursor()
+#     cursor.execute(
+#         """
+#             select * from waifu
+#             order by votes desc
+#             limit 3;
+#             """
+#     )
+
+#     results = cursor.fetchall()
+
+#     embed = discord.Embed()
+
+#     embed.add_field(name="Name", value=results[0][0], inline=True)
+#     embed.add_field(name="Anime", value=results[0][1], inline=True)
+#     embed.add_field(name="Votes", value=results[0][2], inline=True)
+#     embed.add_field(name="Name", value=results[1][0], inline=True)
+#     embed.add_field(name="Anime", value=results[1][1], inline=True)
+#     embed.add_field(name="Votes", value=results[1][2], inline=True)
+#     embed.add_field(name="Name", value=results[2][0], inline=True)
+#     embed.add_field(name="Anime", value=results[2][1], inline=True)
+#     embed.add_field(name="Votes", value=results[2][2], inline=True)
+
+#     await ctx.send(embed=embed)
+
+#     conn.commit()
+#     conn.close()
+
+
+# async def nominate(ctx):
+#     pass
+
+
+# @vote.error
+# async def vote_error(ctx, error):
+#     if isinstance(error, commands.CommandOnCooldown):
+#         msg = 'This command is rate limited, please try again in {:.0f} hours'.format(
+#             error.retry_after / 60 / 60)
+#         await ctx.send(msg)
+#     else:
+#         raise error
 
 #implement spire rpg commands
 
