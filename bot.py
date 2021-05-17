@@ -26,7 +26,7 @@ else:
 
 bot = commands.Bot(command_prefix='ka ')
 
-bot.description = "RPG management tool for the Whitehack RPG as well as various memes."
+bot.description = "Karoo-Bot goes quack."
 
 
 @bot.event
@@ -100,25 +100,6 @@ class anime(commands.Cog):
 async def bonk(ctx, username):
     await ctx.send("https://i.imgur.com/t1a9akh.gif")
 
-
-@bot.command(brief='Shows the requested Whitehack Character', description='Returns a registered www.praisethetsun.com Whitehack character if one such character is registered')
-async def character(ctx):
-    async with aiohttp.ClientSession() as session:
-        async with session.get("https://mysterious-tor-57369.herokuapp.com/api/characters") as r:
-            if r.status == 200:
-                character = await r.json()
-
-    embed = discord.Embed(title="Whitehack Character",
-                          url="http://www.praisethetsun.com")
-
-    embed.add_field(name="Character Name", value=character[0]['charactername'])
-    embed.add_field(name="Class", value=character[0]['characterclass'])
-    embed.add_field(name="Level", value=character[0]['characterlevel'])
-
-    print(ctx.message.author.id)
-    await ctx.send(embed=embed)
-
-
 @bot.command(brief='Recommends a random (popular) anime', description='Returns a list of anime for filthy casuals.')
 @commands.cooldown(1, 4, commands.BucketType.guild)
 async def animerecfilthycasual(ctx):
@@ -180,175 +161,7 @@ async def animerec(ctx):
 
     await ctx.send(embed=embed)
 
-
-@bot.command(brief='Rolls a 20 sided dice', description='Rolls a twenty sided dice')
-async def diceroll(ctx):
-
-    dice_roll = random.randint(1, 20)
-
-    embed = discord.Embed()
-    embed.add_field(name="Roll", value=dice_roll)
-
-    await ctx.send(embed=embed)
-
-
-# league inhouse commands
-# function to check league username
-async def check_username(username):
-    async with aiohttp.ClientSession() as session:
-        async with session.get("https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/{username}?api_key={rito_api_token}".format(username=username, rito_api_token=rito_api_token)) as r:
-            if r.status == 200:
-                return True
-            else:
-                return False
-
-
-@bot.group(nanme='inhouse', brief='Command group for inhouses.', description='Command group for CF inhouses.')
-async def inhouse(ctx):
-    if ctx.invoked_subcommand is None:
-        await ctx.send("Try `wh help inhouse` for all subcommands!")
-
-
-@inhouse.command(description='Sends the date of the next inhouse')
-async def nextgame(ctx):
-    await ctx.send("The next inhouse is 12/11/2020 and 12/12/2020! Hope to see you there!")
-
-
-@inhouse.command(description='Shows the inhouse leaderboard.')
-async def leaderboard(ctx):
-    await ctx.send(
-        """
-    TheYelloBoi has the most wins with 1000 wins. \n
-    SkyPangoro has the most kills with 1000 kills. \n
-    CornTurtle8 is the biggest animale and the winner of the Catto Award.
-    """
-    )
-
-
-@inhouse.command(description='Register for the inhouse. Requires two arguments, your League username and your role (ADC, Mid, Support, Top, Jungle).')
-async def register(ctx, username, role):
-    conn = psycopg2.connect(DATABASE_URL, sslmode='require',
-                            database=DATABASE, user=USER, password=PASSWORD)
-    cursor = conn.cursor()
-
-    # check if user in database
-    cursor.execute(
-        """
-            SELECT * from participant_info
-            where discord_id = (%s)
-            """,
-        (ctx.message.author.id,)
-    )
-
-    if role not in ['ADC', 'Mid', 'Support', 'Top', 'Jungle', 'Dog']:
-        await ctx.send("Sorry, we don't recognize that role.")
-        return
-
-    if len(cursor.fetchall()) > 0:
-        await ctx.send("Sorry, it looks like you've already registered for the inhouse.")
-    else:
-        valid = check_username(username)
-        if valid:
-            cursor.execute(
-                """
-                INSERT INTO participant_info VALUES
-                    (%s, %s, %s)
-                ;
-                """,
-                (username, role, ctx.message.author.id)
-            )
-            await ctx.send("Thank you for registering!")
-
-        else:
-            await ctx.send("Sorry, but we can't find that league username!")
-
-    conn.commit()
-    conn.close()
-
-
-# implement method to change league name bound to your ID
-@inhouse.command(description='Change your League username to something else in the inhouse.')
-async def changeid(ctx, username):
-    conn = psycopg2.connect(DATABASE_URL, sslmode='require',
-                            database=DATABASE, user=USER, password=PASSWORD)
-    cursor = conn.cursor()
-
-    valid = check_username(username)
-    if valid:
-        # check if user in database
-        cursor.execute(
-            """
-            UPDATE participant_info
-            SET league_name = (%s)
-            where discord_id = (%s)
-            """,
-            (username, ctx.message.author.id)
-        )
-        await ctx.send("League name updated!")
-
-    else:
-        await ctx.send("Sorry, but we can't find that league username!")
-
-    conn.commit()
-    conn.close()
-
-
-@inhouse.command()
-async def userinfo(ctx, member: discord.Member = None):
-    user_id = member.id or ctx.author.id
-    conn = psycopg2.connect(DATABASE_URL, sslmode='require',
-                            database=DATABASE, user=USER, password=PASSWORD)
-
-    cursor = conn.cursor()
-    cursor.execute(
-        """
-            SELECT * from participant_info
-            where discord_id = (%s)
-            """,
-        (user_id,)
-    )
-    results = cursor.fetchall()
-
-    if len(results) == 0:
-        await ctx.send("There is no user registered with that account.")
-        return
-    else:
-        embed = discord.Embed()
-        embed.add_field(name="League ID", value=results[0][0], inline=False)
-        embed.add_field(name="Role ID", value=results[0][1], inline=False)
-
-        await ctx.send(embed=embed)
-
-    conn.commit()
-    conn.close()
-
-
-# making fun of jonathan commands
-@bot.command(brief='Checks Fetri\'s current LP', description='Calls the Riot API to fetch Fetri\'s current LP and Elo')
-async def isjtdiamondyet(ctx):
-
-    async with aiohttp.ClientSession() as session:
-        # async with session.get("https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/Fetri?api_key={rito_api_token}".format(rito_api_token=rito_api_token)) as r:
-        #     if r.status == 200:
-        #         user = await r.json()
-        #         accountId = user['id']
-
-        async with session.get("https://na1.api.riotgames.com/lol/league/v4/entries/by-summoner/jlKbXhBN5wSlfLzlLyGggV6W7PBJRULgC9__LMhtOuI9Roc?api_key={rito_api_token}".format(rito_api_token=rito_api_token)) as r:
-            if r.status == 200:
-                user_info = await r.json()
-
-    if user_info[0]['tier'] == "DIAMOND":
-        await ctx.send("He has reached the promise land!")
-    else:
-        await ctx.send("Crittlestick's current rank is {tier} : {rank}".format(tier=user_info[0]['tier'], rank=user_info[0]['rank']))
-
-# waifu voting
-@bot.group(nanme='waifu', brief='Command group for waifus.', description='Command group for waifus.')
-async def waifu(ctx):
-    if ctx.invoked_subcommand is None:
-        await ctx.send("Try `wh help waifu` for all subcommands!")
-
-
+#waifu commands
 @waifu.command(brief='Vote for a waifu', description='Determine the best anime waifu.')
 @commands.cooldown(1, 86400, BucketType.member)
 async def vote(ctx, *args):
@@ -492,6 +305,8 @@ async def vote_error(ctx, error):
         await ctx.send(msg)
     else:
         raise error
+
+#implement spire rpg commands
 
 
 bot.run(TOKEN)
