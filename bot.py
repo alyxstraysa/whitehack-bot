@@ -185,5 +185,8 @@ async def spirechar(ctx):
     embed.add_field(name="Description", value=playername)
     embed.add_field(name='Class', value=playerclass)
     embed.add_field(name='Durance', value=durance)
+
+    await ctx.send(embed=embed)
+
     
 bot.run(TOKEN)
