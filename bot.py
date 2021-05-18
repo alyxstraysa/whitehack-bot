@@ -188,5 +188,43 @@ async def spirechar(ctx):
 
     await ctx.send(embed=embed)
 
+@bot.command(brief='Checks stress.', description="Returns a description of your Spire RPG character's stress.")
+async def spirestress(ctx):
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require',
+                            database=DATABASE, user=USER, password=PASSWORD)
+    cursor = conn.cursor()
+    cursor.execute(
+        """
+            select
+                c.character_name,
+                s.blood,
+                s.mind,
+                s.silver,
+                s.shadow,
+                s.reputation
+            from characters c
+            left join current_stress s 
+            on c.id = s.id;
+            where discord_user = (%s);
+        """, (str(ctx.message.author.id),)
+    )
+
+    charname, blood, mind, silver, shadow, reputation = cursor.fetchall()[0]
+
+    embed = discord.Embed(title="Character")
+    embed.add_field(name="Name", value=charname, inline=False)
+    embed.add_field(name="Blood", value="♥ " * (blood) + "♡ " * (5 - blood), inline=False)
+    embed.add_field(name='Mind', value="♥ " * (mind) + "♡ " * (5 - mind), inline=False)
+    embed.add_field(name='Silver', value="♥ " * (silver) + "♡ " * (5 - silver), inline=False)
+    embed.add_field(name='Shadow', value="♥ " * (shadow) + "♡ " * (5 - shadow), inline=False)
+    embed.add_field(name='Shadow', value="♥ " * (reputation) + "♡ " * (5 - reputation), inline=False)
+
+    await ctx.send(embed=embed)
+
+async def spirechar(ctx):
+    #rest function should clear all free slots
+    #rest function should clear all stress
+    #argument for type of rest (refresh, narrative, etc.)
+    pass
     
 bot.run(TOKEN)
