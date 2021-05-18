@@ -207,8 +207,9 @@ async def spirechar(ctx):
         """
             select * from characters
             where discord_user = (%s);
-        """, (ctx.message.author.id)
+        """, (str(ctx.message.author.id),)
     )
+
     userid, charname, playername, playerclass, durance, discord user = cursor.fetchall()
 
     embed = discord.Embed(title="Character")
