@@ -204,7 +204,7 @@ async def spirestress(ctx):
                 s.reputation
             from characters c
             left join current_stress s 
-            on c.id = s.id;
+            on c.id = s.id
             where discord_user = (%s);
         """, (str(ctx.message.author.id),)
     )
