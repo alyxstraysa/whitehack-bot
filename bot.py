@@ -181,10 +181,10 @@ async def spirechar(ctx):
     userid, charname, playername, playerclass, durance, discord_user = cursor.fetchall()[0]
 
     embed = discord.Embed(title="Character")
-    embed.add_field(name="Name", value=charname)
-    embed.add_field(name="Description", value=playername)
-    embed.add_field(name='Class', value=playerclass)
-    embed.add_field(name='Durance', value=durance)
+    embed.add_field(name="Name", value=charname, inline=False)
+    embed.add_field(name="Description", value=playername, inline=False)
+    embed.add_field(name='Class', value=playerclass, inline=False)
+    embed.add_field(name='Durance', value=durance, inline=False)
 
     await ctx.send(embed=embed)
 
