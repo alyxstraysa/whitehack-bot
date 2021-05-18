@@ -160,38 +160,6 @@ async def animerec(ctx):
 
     await ctx.send(embed=embed)
 
-@bot.command(brief='Recommends a random anime', description='Returns a carefully curated list of anime for non-plebs.')
-@commands.cooldown(1, 4)
-async def animerec(ctx):
-    anime_id_list = [
-        "13125",
-        "10721",
-        "9756"
-    ]
-
-    anime_id = random.choice(anime_id_list)
-
-    async with aiohttp.ClientSession() as session:
-        async with session.get("https://api.jikan.moe/v3/anime/{anime_id}".format(anime_id=anime_id)) as r:
-            if r.status == 200:
-                anime = await r.json()
-            else:
-                print("There is an error with the anime API!")
-                import requests
-                r = requests.get(
-                    "https://api.jikan.moe/v3/anime/{anime_id}".format(anime_id=anime_id))
-                print(r.text)
-
-    embed = discord.Embed(title="Anime Recommendation")
-    embed.add_field(name="Name", value=anime['title'])
-    embed.add_field(name="Description", value=anime['synopsis'][0:1000])
-
-    print(anime['synopsis'])
-
-    embed.set_image(url=anime['image_url'])
-
-    await ctx.send(embed=embed)
-
 #implement spire rpg commands
 class spire(commands.Cog):
     def __init__(self, bot):
