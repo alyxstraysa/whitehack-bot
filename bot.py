@@ -210,7 +210,7 @@ async def spirechar(ctx):
         """, (str(ctx.message.author.id),)
     )
 
-    userid, charname, playername, playerclass, durance, discord user = cursor.fetchall()
+    userid, charname, playername, playerclass, durance, discord user = cursor.fetchall()[0]
 
     embed = discord.Embed(title="Character")
     embed.add_field(name="Name", value=charname)
