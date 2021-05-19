@@ -82,6 +82,9 @@ async def on_message(message):
 
     elif "rerorero" == message.content:
         await message.channel.send("https://media.giphy.com/media/aYVhZCKdtXZSw/giphy.gif")
+    
+    elif "worse than death" in message.content:
+        await message.channel.send("https://media.giphy.com/media/HDoL0CIhb1uoM/giphy.gif")
 
     elif "EXILE" == message.content.upper():
         await message.channel.send("https://cdn.discordapp.com/attachments/237359545058328577/841791249895653436/take_him_to_brazil.gif")
