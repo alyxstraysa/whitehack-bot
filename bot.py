@@ -89,7 +89,7 @@ async def on_message(message):
     elif "EXILE" == message.content.upper():
         await message.channel.send("https://cdn.discordapp.com/attachments/237359545058328577/841791249895653436/take_him_to_brazil.gif")
     
-    elif "uselessmiwa" == message.content.upper():
+    elif "uselessmiwa" == message.content.lower():
         await message.channel.send("https://i.imgur.com/jdvSUxC.jpg")
 
     await bot.process_commands(message)
