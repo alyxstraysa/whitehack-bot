@@ -9,6 +9,7 @@ import psycopg2
 import random
 from bs4 import BeautifulSoup
 import re
+import urllib2
 
 ON_HEROKU = 'ON_HEROKU' in os.environ
 
@@ -144,16 +145,23 @@ async def animesearch(ctx, arg):
                 anime = await r.json()
                 anime = anime['results'][0]
 
+    mal_id = anime['mal_id']
+
+    async with aiohttp.ClientSession() as session:
+        api_call = "https://myanimelist.net/anime/{mal_id}/".format(mal_id=mal_id)
+        async with session.get(api_call) as r:
+            if r.status == 200:
+                soup = BeautifulSoup(r.content)
+                synopsis = soup.find('p', itemprop="description").get_text()
+
     embed = discord.Embed(title="Anime Search")
     embed.add_field(name="Name", value=anime['title'], inline=False)
-    embed.add_field(name="Description", value=anime['synopsis'], inline=False)
+    embed.add_field(name="Description", value=synopsis, inline=False)
     embed.add_field(name='Link', value=anime['url'], inline=False)
 
     embed.set_image(url=anime['image_url'])
 
     await ctx.send(embed=embed)
-
-
 
 @bot.command(brief='Recommends a random anime', description='Returns a carefully curated list of anime for non-plebs.')
 @commands.cooldown(1, 4)
