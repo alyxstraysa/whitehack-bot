@@ -143,13 +143,6 @@ async def anime_info(ctx, arg):
             if r.status == 200:
                 anime = await r.json()
 
-    anime_id = random.choice(anime['top'])["mal_id"]
-
-    async with aiohttp.ClientSession() as session:
-        async with session.get("https://api.jikan.moe/v3/anime/{anime_id}".format(anime_id=anime_id)) as r:
-            if r.status == 200:
-                anime = await r.json()['results'][0]
-
     embed = discord.Embed(title="Anime Recommendation")
     embed.add_field(name="Name", value=anime['title'])
     embed.add_field(name="Description", value=anime['synopsis'][0:1000])
