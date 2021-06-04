@@ -9,7 +9,6 @@ import psycopg2
 import random
 from bs4 import BeautifulSoup
 import re
-import urllib2
 
 ON_HEROKU = 'ON_HEROKU' in os.environ
 
