@@ -138,13 +138,13 @@ async def animerecfilthycasual(ctx):
 async def anime_info(ctx, arg):
 
     async with aiohttp.ClientSession() as session:
-        api_call = "https://api.jikan.moe/v3/search/anime?q={}&page=1".format(anime=arg)
+        api_call = "https://api.jikan.moe/v3/search/anime?q={anime}&page=1".format(anime=arg)
         async with session.get(api_call) as r:
             if r.status == 200:
                 anime = await r.json()['results'][0]
 
     print(anime)
-    
+
     embed = discord.Embed(title="Anime Recommendation")
     embed.add_field(name="Name", value=anime['title'])
     embed.add_field(name="Description", value=anime['synopsis'][0:1000])
