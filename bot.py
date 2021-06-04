@@ -144,15 +144,12 @@ async def animesearch(ctx, arg):
                 anime = await r.json()
                 anime = anime['results'][0]
 
-    mal_id = anime['mal_id']
-    print(mal_id)
+            mal_id = anime['mal_id']
 
-    async with aiohttp.ClientSession() as session:
-        api_call = "https://myanimelist.net/anime/{mal_id}/".format(mal_id=mal_id)
-        async with session.get(api_call) as r:
-            if r.status == 200:
-                print(r.json())
-                soup = BeautifulSoup(r.content, features='html.parser')
+        api_call2 = "https://myanimelist.net/anime/{mal_id}/".format(mal_id=mal_id)
+        async with session.get(api_call2) as r2:
+            if r2.status == 200:
+                soup = BeautifulSoup(r2.content, features='html.parser')
                 synopsis = soup.find('p', itemprop="description").get_text()
 
     embed = discord.Embed(title="Anime Search")
