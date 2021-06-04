@@ -141,9 +141,8 @@ async def anime_info(ctx, arg):
         api_call = "https://api.jikan.moe/v3/search/anime?q={anime}&page=1".format(anime=arg)
         async with session.get(api_call) as r:
             if r.status == 200:
-                anime = await r.json()['results'][0]
-
-    print(anime)
+                anime = await r.json()
+                anime = anime['results'][0]
 
     embed = discord.Embed(title="Anime Recommendation")
     embed.add_field(name="Name", value=anime['title'])
