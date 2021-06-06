@@ -156,11 +156,11 @@ async def animesearch(ctx, anime_name, summary=None):
 
     embed.set_image(url=anime['image_url'])
 
-    await ctx.send(embed=embed)
-
-    print(type(summary))
     if summary == 'summary':
         await ctx.send(synopsis)
+    else:
+        await ctx.send(embed=embed)
+
 
 @bot.command(brief='Recommends a random anime', description='Returns a carefully curated list of anime for non-plebs.')
 @commands.cooldown(1, 4)
