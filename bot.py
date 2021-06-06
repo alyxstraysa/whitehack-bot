@@ -135,10 +135,10 @@ async def animerecfilthycasual(ctx):
 
 @bot.command(brief='Returns info about an anime', description='Returns info about an anime')
 @commands.cooldown(1, 4, commands.BucketType.guild)
-async def animesearch(ctx, arg):
+async def animesearch(ctx, anime_name, summary=None):
 
     async with aiohttp.ClientSession() as session:
-        api_call = "https://api.jikan.moe/v3/search/anime?q={anime}&page=1".format(anime=arg)
+        api_call = "https://api.jikan.moe/v3/search/anime?q={anime}&page=1".format(anime=anime_name)
         async with session.get(api_call) as r:
             if r.status == 200:
                 anime = await r.json()
@@ -152,12 +152,14 @@ async def animesearch(ctx, arg):
 
     embed = discord.Embed(title="Anime Search")
     embed.add_field(name="Name", value=anime['title'], inline=False)
-    embed.add_field(name="Description", value=synopsis, inline=False)
     embed.add_field(name='Link', value=anime['url'], inline=False)
 
     embed.set_image(url=anime['image_url'])
 
     await ctx.send(embed=embed)
+
+    if summary == True:
+        await ctx.send(synopsis)
 
 @bot.command(brief='Recommends a random anime', description='Returns a carefully curated list of anime for non-plebs.')
 @commands.cooldown(1, 4)
