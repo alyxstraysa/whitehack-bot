@@ -158,7 +158,8 @@ async def animesearch(ctx, anime_name, summary=None):
 
     await ctx.send(embed=embed)
 
-    if summary == True:
+    print(type(summary))
+    if summary == 'summary':
         await ctx.send(synopsis)
 
 @bot.command(brief='Recommends a random anime', description='Returns a carefully curated list of anime for non-plebs.')
