@@ -146,11 +146,9 @@ async def animesearch(ctx, arg):
 
             mal_id = anime['mal_id']
 
-        api_call2 = "https://myanimelist.net/anime/{mal_id}/".format(mal_id=mal_id)
-        async with session.get(api_call2) as r2:
-            if r2.status == 200:
-                soup = BeautifulSoup(r2.content, features='html.parser')
-                synopsis = soup.find('p', itemprop="description").get_text()
+    r = requests.get("https://myanimelist.net/anime/{mal_id}/".format(mal_id=mal_id))
+    soup = BeautifulSoup(r.content, features='html.parser')
+    synopsis = soup.find('p', itemprop="description").get_text()
 
     embed = discord.Embed(title="Anime Search")
     embed.add_field(name="Name", value=anime['title'], inline=False)
