@@ -92,6 +92,9 @@ async def on_message(message):
     elif "uselessmiwa" == message.content.lower():
         await message.channel.send("https://i.imgur.com/jdvSUxC.jpg")
 
+    elif "pityroll" == message.content.lower():
+        await message.channel.send("https://i.imgur.com/8ehEWKJ.mp4")
+
     await bot.process_commands(message)
 
 # define cogs
