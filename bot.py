@@ -206,7 +206,7 @@ async def whitehackregister(ctx):
     print(ctx.message.author.id)
     
     url = "https://whitehackchargen.herokuapp.com/users"
-    r = requests.post('http://httpbin.org/post', json={"discord_id": ctx.message.author.id,
+    r = requests.post('https://whitehackchargen.herokuapp.com/users', json={"discord_id": ctx.message.author.id,
                                                         "discord_name": ctx.message.author.name})
     print(r.status_code)
 
