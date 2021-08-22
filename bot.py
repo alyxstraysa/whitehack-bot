@@ -207,7 +207,7 @@ async def whitehackregister(ctx):
     r = requests.post('https://whitehackchargen.herokuapp.com/users', json={"discord_id": str(ctx.message.author.id),
                                                                             "discord_name": str(ctx.message.author.name)})
 
-    if r.message == "User created successfully":
+    if r.json()['message'] == "User created successfully":
         await ctx.send("User created successfully!")
     else:
         await ctx.send("There was an error registering your user. Please try again later.")
