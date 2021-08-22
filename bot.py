@@ -196,71 +196,31 @@ async def animerec(ctx):
 
     await ctx.send(embed=embed)
 
-#implement spire rpg commands
-class spire(commands.Cog):
+#implement whitehack rpg commands
+class whitehack(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-@bot.command(brief='Returns character info', description='Returns a description of your Spire RPG character.')
-async def spirechar(ctx):
+@bot.command(brief='Registers your discord username with the Whitehack bot', description='Registers your discord username with the Whitehack bot and assigns you an ID')
+async def whitehackregister(ctx):
     print(ctx.message.author.id)
-    conn = psycopg2.connect(DATABASE_URL, sslmode='require',
-                            database=DATABASE, user=USER, password=PASSWORD)
-    cursor = conn.cursor()
-    cursor.execute(
-        """
-            select * from characters
-            where discord_user = (%s);
-        """, (str(ctx.message.author.id),)
-    )
-
-    userid, charname, playername, playerclass, durance, discord_user = cursor.fetchall()[0]
-
-    embed = discord.Embed(title="Character")
-    embed.add_field(name="Name", value=charname, inline=False)
-    embed.add_field(name="Description", value=playername, inline=False)
-    embed.add_field(name='Class', value=playerclass, inline=False)
-    embed.add_field(name='Durance', value=durance, inline=False)
-
-    await ctx.send(embed=embed)
-
-@bot.command(brief='Checks stress.', description="Returns a description of your Spire RPG character's stress.")
-async def spirestress(ctx):
-    conn = psycopg2.connect(DATABASE_URL, sslmode='require',
-                            database=DATABASE, user=USER, password=PASSWORD)
-    cursor = conn.cursor()
-    cursor.execute(
-        """
-            select
-                c.character_name,
-                s.blood,
-                s.mind,
-                s.silver,
-                s.shadow,
-                s.reputation
-            from characters c
-            left join current_stress s 
-            on c.id = s.id
-            where discord_user = (%s);
-        """, (str(ctx.message.author.id),)
-    )
-
-    charname, blood, mind, silver, shadow, reputation = cursor.fetchall()[0]
-
-    embed = discord.Embed(title="Character")
-    embed.add_field(name="Name", value=charname, inline=False)
-    embed.add_field(name="Blood", value="♥ " * (blood) + "♡ " * (5 - blood), inline=False)
-    embed.add_field(name='Mind', value="♥ " * (mind) + "♡ " * (5 - mind), inline=False)
-    embed.add_field(name='Silver', value="♥ " * (silver) + "♡ " * (5 - silver), inline=False)
-    embed.add_field(name='Shadow', value="♥ " * (shadow) + "♡ " * (5 - shadow), inline=False)
-    embed.add_field(name='Shadow', value="♥ " * (reputation) + "♡ " * (5 - reputation), inline=False)
-
-    await ctx.send(embed=embed)
-
-async def spirechar(ctx):
-    #rest function should clear all free slots
-    #rest function should clear all stress
-    #argument for type of rest (refresh, narrative, etc.)
-    pass
     
+    url = "https://whitehackchargen.herokuapp.com/users"
+    r = requests.post('http://httpbin.org/post', json={"discord_id": ctx.message.author.id,
+                                                        "discord_name": ctx.message.author.name})
+    print(r.status_code)
+
+    await ctx.send("User successfully registered!")
+
+# @bot.command(brief='Returns character info', description='Returns a description of your Spire RPG character.')
+# async def whitehackchar(ctx):
+#     print(ctx.message.author.id)
+    
+#     url = "https://whitehackchargen.herokuapp.com/users"
+#     r = requests.post('http://httpbin.org/post', json={"discord_id": ctx.message.author.id,
+#                                                         "discord_name": ctx.message.author.name})
+#     print(r.status_code)
+
+#     await ctx.send("User successfully registered!")
+
 bot.run(TOKEN)
