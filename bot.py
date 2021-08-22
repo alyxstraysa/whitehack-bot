@@ -206,9 +206,10 @@ async def whitehackregister(ctx):
     
     r = requests.post('https://whitehackchargen.herokuapp.com/users', json={"discord_id": str(ctx.message.author.id),
                                                                             "discord_name": str(ctx.message.author.name)})
-    print(r.status_code)
-
-    await ctx.send("User successfully registered!")
+    if r.status_code == 200:
+        await ctx.send("User successfully registered!")
+    else:
+        await ctx.send("There was an error registering your user. Please try again later.")
 
 # @bot.command(brief='Returns character info', description='Returns a description of your Spire RPG character.')
 # async def whitehackchar(ctx):
