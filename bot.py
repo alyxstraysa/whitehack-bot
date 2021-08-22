@@ -203,11 +203,9 @@ class whitehack(commands.Cog):
 
 @bot.command(brief='Registers your discord username with the Whitehack bot', description='Registers your discord username with the Whitehack bot and assigns you an ID')
 async def whitehackregister(ctx):
-    print(ctx.message.author.id)
     
-    url = "https://whitehackchargen.herokuapp.com/users"
-    r = requests.post('https://whitehackchargen.herokuapp.com/users', json={"discord_id": ctx.message.author.id,
-                                                        "discord_name": ctx.message.author.name})
+    r = requests.post('https://whitehackchargen.herokuapp.com/users', json={"discord_id": str(ctx.message.author.id),
+                                                                            "discord_name": str(ctx.message.author.name)})
     print(r.status_code)
 
     await ctx.send("User successfully registered!")
