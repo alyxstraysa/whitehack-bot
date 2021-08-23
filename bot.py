@@ -212,15 +212,30 @@ async def whitehackregister(ctx):
     else:
         await ctx.send("There was an error registering your user. Please try again later.")
 
-# @bot.command(brief='Returns character info', description='Returns a description of your Spire RPG character.')
-# async def whitehackchar(ctx):
-#     print(ctx.message.author.id)
-    
-#     url = "https://whitehackchargen.herokuapp.com/users"
-#     r = requests.post('http://httpbin.org/post', json={"discord_id": ctx.message.author.id,
-#                                                         "discord_name": ctx.message.author.name})
-#     print(r.status_code)
+@bot.command(brief='Generates a random character', description='Generates a random character')
+async def whitehackrandomchar(ctx):
+    r = requests.post('https://whitehackchargen.herokuapp.com/generate')
+    random_char = r.json()
 
-#     await ctx.send("User successfully registered!")
+    embed = discord.Embed(title="Whitehack Character")
+    embed.add_field(name="Name", value='Placeholder')
+    embed.add_field(name="Archetype", value=random_char['archetype'])
+    embed.add_field(name="Group1", value=random_char['group1'])
+    embed.add_field(name="Group2", value=random_char['group2'])
+    embed.add_field(name="Group3", value=random_char['group3'])
+    embed.add_field(name="Group4", value=random_char['group4'])
+    embed.add_field(name="Group5", value=random_char['group5'])
+    embed.add_field(name="Strength", value=random_char['stat_str'])
+    embed.add_field(name="Dexterity", value=random_char['stat_dex'])
+    embed.add_field(name="Constituion", value=random_char['stat_con'])
+    embed.add_field(name="Intelligence", value=random_char['stat_int'])
+    embed.add_field(name="Wisdom", value=random_char['stat_wis'])
+    embed.add_field(name="ST", value=random_char['ST'])
+    embed.add_field(name="HP", value=random_char['HP'])
+    embed.add_field(name="AC", value=random_char['AC'])
+    embed.add_field(name="MV", value=random_char['MV'])
+    embed.add_field(name="AV", value=random_char['AV'])    
+
+    await ctx.send(embed=embed)
 
 bot.run(TOKEN)
