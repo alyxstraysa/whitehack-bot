@@ -214,7 +214,7 @@ async def whitehackregister(ctx):
 
 @bot.command(brief='Generates a random character', description='Generates a random character')
 async def whitehackrandomchar(ctx):
-    r = requests.post('https://whitehackchargen.herokuapp.com/generate')
+    r = requests.get('https://whitehackchargen.herokuapp.com/generate')
     random_char = r.json()
 
     embed = discord.Embed(title="Whitehack Character")
