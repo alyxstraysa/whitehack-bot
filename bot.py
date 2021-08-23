@@ -213,12 +213,12 @@ async def whitehackregister(ctx):
         await ctx.send("There was an error registering your user. Please try again later.")
 
 @bot.command(brief='Generates a random character', description='Generates a random character')
-async def whitehackrandomchar(ctx):
-    r = requests.get('https://whitehackchargen.herokuapp.com/generate')
+async def whitehackrandomchar(ctx, character_name='Placeholder', race=False):
+    r = requests.get('https://whitehackchargen.herokuapp.com/generate?discord_id={discord_id}&race={race}'.format(discord_id = str(ctx.message.author.id), race=race))
     random_char = r.json()
 
     embed = discord.Embed(title="Whitehack Character")
-    embed.add_field(name="Name", value='Placeholder', inline=False)
+    embed.add_field(name="Name", value=character_name, inline=False)
     embed.add_field(name="Archetype", value=random_char['archetype'],inline=False)
     embed.add_field(name="Group1", value=random_char['group1'],inline=False)
     embed.add_field(name="Group2", value=random_char['group2'],inline=False)
