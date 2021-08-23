@@ -227,7 +227,7 @@ async def whitehackrandomchar(ctx):
     embed.add_field(name="Group5", value=random_char['group5'],inline=False)
     embed.add_field(name="Strength", value=random_char['stat_str'],inline=False)
     embed.add_field(name="Dexterity", value=random_char['stat_dex'],inline=False)
-    embed.add_field(name="Constituion", value=random_char['stat_con'],inline=False)
+    embed.add_field(name="Constitution", value=random_char['stat_con'],inline=False)
     embed.add_field(name="Intelligence", value=random_char['stat_int'],inline=False)
     embed.add_field(name="Wisdom", value=random_char['stat_wis'],inline=False)
     embed.add_field(name="ST", value=random_char['ST'],inline=False)
@@ -240,4 +240,5 @@ async def whitehackrandomchar(ctx):
     await ctx.send("If you would like to save this character, react to this message.")
 
     #implement post method if they want to save the character
+
 bot.run(TOKEN)
