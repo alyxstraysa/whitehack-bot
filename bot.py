@@ -274,8 +274,7 @@ async def whitehackrandomchar(ctx, character_name='Placeholder', race=False):
         }
         print(char_info)
         #r = requests.post('https://whitehackchargen.herokuapp.com/character', json=char_info)
-
     except:
-        pass
+        await ctx.send("Timed out")
 
 bot.run(TOKEN)
