@@ -239,6 +239,12 @@ async def whitehackrandomchar(ctx, character_name='Placeholder', race=False):
     await ctx.send(embed=embed)
     await ctx.send("If you would like to save this character, react to this message.")
 
-    #implement post method if they want to save the character
+    try:
+        await bot.wait_for('reaction_add', timeout=30, check=lambda reaction, user: reaction.message.id == ctx.message.id and user.id == ctx.message.author.id)
+        print("Reacted!")
+        #implement post method if they want to save the character
+
+    except:
+        pass
 
 bot.run(TOKEN)
