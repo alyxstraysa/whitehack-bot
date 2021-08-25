@@ -248,6 +248,9 @@ async def whitehackrandomchar(ctx, character_name='Placeholder', race=False):
         user_id = requests.get("http://whitehackchargen.herokuapp.com/users/{discord_id}".format(discord_id = str(ctx.message.author.id)))
         user_id = user_id.json()['user_id']
 
+        print("random_char")
+        print(random_char)
+        
         char_info = {
             'user_id': user_id,
             'char_id': 'Default',
