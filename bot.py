@@ -236,11 +236,13 @@ async def whitehackrandomchar(ctx, character_name='Placeholder', race=False):
     embed.add_field(name="MV", value=random_char['MV'],inline=True)
     embed.add_field(name="AV", value=random_char['AV'],inline=True)    
 
-    char_embed = await ctx.send(embed=embed)
+    await ctx.send(embed=embed)
     await ctx.send("If you would like to save this character, react to this message.")
 
     try:
-        await char_embed.message.add_reaction('\U0001F44D')
+        await ctx.message.add_reaction('\U0001F44D')
+        #await bot.wait_for('reaction_add', timeout=30, check=check_msg)
+        await ctx.send("Reacted!")
 
         #implement post method if they want to save the character
         user_id = requests.get("http://whitehackchargen.herokuapp.com/users/{discord_id}".format(discord_id = str(ctx.message.author.id)))
