@@ -241,7 +241,7 @@ async def whitehackrandomchar(ctx, character_name='Placeholder', race=False):
 
     try:
         await msg.add_reaction("\U0001F4CC")
-        #await bot.wait_for('reaction_add', timeout=30, check=check_msg)
+        await bot.wait_for('reaction_add', timeout=30, check=lambda reaction, user: user.id == ctx.message.author.id)
 
         #implement post method if they want to save the character
         user_id = requests.get("http://whitehackchargen.herokuapp.com/users/{discord_id}".format(discord_id = str(ctx.message.author.id)))
