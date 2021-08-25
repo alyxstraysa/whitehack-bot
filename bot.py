@@ -249,6 +249,7 @@ async def whitehackrandomchar(ctx, character_name='Placeholder', race=False):
         user_id = user_id.json()['user_id']
 
         random_char['user_id'] = user_id
+        print(random_char)
         #r = requests.post('https://whitehackchargen.herokuapp.com/character', json=char_info)
     except:
         await ctx.send("Error saving your character")
