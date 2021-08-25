@@ -246,10 +246,7 @@ async def whitehackrandomchar(ctx, character_name='Placeholder', race=False):
 
         #implement post method if they want to save the character
         user_id = requests.get("http://whitehackchargen.herokuapp.com/users/{discord_id}".format(discord_id = str(ctx.message.author.id)))
-        print(ctx.message.author.id)
-        print(user_id)
-        user_id = requests.json()['user_id']
-        print(user_id)
+        user_id = user_id.json()['user_id']
 
         char_info = {
             'user_id': user_id,
@@ -280,6 +277,6 @@ async def whitehackrandomchar(ctx, character_name='Placeholder', race=False):
         print(char_info)
         #r = requests.post('https://whitehackchargen.herokuapp.com/character', json=char_info)
     except:
-        await ctx.send("Timed out")
+        await ctx.send("Error saving your character")
 
 bot.run(TOKEN)
