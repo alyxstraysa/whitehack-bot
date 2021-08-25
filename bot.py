@@ -248,36 +248,7 @@ async def whitehackrandomchar(ctx, character_name='Placeholder', race=False):
         user_id = requests.get("http://whitehackchargen.herokuapp.com/users/{discord_id}".format(discord_id = str(ctx.message.author.id)))
         user_id = user_id.json()['user_id']
 
-        print("random_char")
-        print(random_char)
-        
-        char_info = {
-            'user_id': user_id,
-            'char_id': 'Default',
-            'name': character_name,
-            'archetype': random_char['archetype'],
-            'group1': random_char['group1'],
-            'group2': random_char['group2'],
-            'group3': random_char['group3'],
-            'group4': random_char['group4'],
-            'group5': random_char['group5'],
-            'stat_str': random_char['stat_str'],
-            'stat_dex': random_char['stat_dex'],
-            'stat_con': random_char['stat_con'],
-            'stat_int': random_char['stat_int'],
-            'stat_wis': random_char['stat_wis'],
-            'str_grp': random_char['str_grp'],
-            'dex_grp': random_char['dex_grp'],
-            'con_grp': random_char['con_grp'],
-            'int_grp': random_char['int_grp'],
-            'wis_grp': random_char['wis_grp'],
-            'ST': random_char['ST'],
-            'HP': random_char['HP'],
-            'AC': random_char['AC'],
-            'MV': random_char['MV'],
-            'AV': random_char['AV']
-        }
-        print(char_info)
+        random_char['user_id'] = user_id
         #r = requests.post('https://whitehackchargen.herokuapp.com/character', json=char_info)
     except:
         await ctx.send("Error saving your character")
