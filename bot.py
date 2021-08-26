@@ -7,6 +7,7 @@ from discord.ext import commands
 import aiohttp
 import psycopg2
 import random
+import json
 from bs4 import BeautifulSoup
 import re
 
@@ -251,7 +252,7 @@ async def whitehackrandomchar(ctx, character_name='Placeholder', race=False):
         random_char['char_id'] = 'DEFAULT'
         random_char['name'] = character_name
 
-        r = requests.post('https://whitehackchargen.herokuapp.com/character', json=random_char)
+        r = requests.post('https://whitehackchargen.herokuapp.com/character', json=json.dumps(random_char))
         if r.json()['message'] == "Character added":
             await ctx.send("Character added successfully!")
         else:
