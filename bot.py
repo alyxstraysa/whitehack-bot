@@ -252,7 +252,7 @@ async def whitehackrandomchar(ctx, character_name='Placeholder', race=False):
         random_char['char_id'] = 'DEFAULT'
         random_char['name'] = character_name
 
-        r = requests.post('https://whitehackchargen.herokuapp.com/character', json=json.dumps(random_char))
+        r = requests.post('https://whitehackchargen.herokuapp.com/character', json=json.loads(json.dumps(random_char)))
         if r.json()['message'] == "Character added":
             await ctx.send("Character added successfully!")
         else:
