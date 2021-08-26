@@ -96,6 +96,9 @@ async def on_message(message):
     elif "pityroll" == message.content.lower():
         await message.channel.send("https://i.imgur.com/8ehEWKJ.mp4")
 
+    elif any(word in message.content.lower() for word in ["good night", "gn", "goodnight"]):
+        await message.channel.send("https://c.tenor.com/9iKFU2dG6A4AAAAC/goodnight-sleeping.gif")
+        
     await bot.process_commands(message)
 
 # define cogs
@@ -242,7 +245,7 @@ async def whitehackrandomchar(ctx, character_name='Placeholder', race=False):
 
     try:
         await msg.add_reaction("\U0001F4CC")
-        await bot.wait_for('reaction_add', timeout=30, check=lambda reaction, user: user.id == ctx.message.author.id)
+        await bot.wait_for('reaction_add', timeout=10, check=lambda reaction, user: user.id == ctx.message.author.id)
 
         #implement post method if they want to save the character
         user_id = requests.get("http://whitehackchargen.herokuapp.com/users/{discord_id}".format(discord_id = str(ctx.message.author.id)))
@@ -259,6 +262,6 @@ async def whitehackrandomchar(ctx, character_name='Placeholder', race=False):
         else:
             await ctx.send("There was an error adding your character. Please try again later.")
     except Exception as e:
-        print(e)
+        await ctx.send("Your character was not saved. Please try again later.")
 
 bot.run(TOKEN)
