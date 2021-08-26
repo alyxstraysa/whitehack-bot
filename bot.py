@@ -248,10 +248,15 @@ async def whitehackrandomchar(ctx, character_name='Placeholder', race=False):
         user_id = user_id.json()['user_id']
 
         random_char['user_id'] = user_id
-        print(random_char)
-        #r = requests.post('https://whitehackchargen.herokuapp.com/character', json=char_info)
+        random_char['char_id'] = 'DEFAULT'
+        random_char['name'] = character_name
+
+        r = requests.post('https://whitehackchargen.herokuapp.com/character', json=random_char)
+        if r.json()['message'] == "Character added":
+            await ctx.send("Character added successfully!")
+        else:
+            await ctx.send("There was an error adding your character. Please try again later.")
     except Exception as e:
         print(e)
-        await ctx.send("Error saving your character")
 
 bot.run(TOKEN)
