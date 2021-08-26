@@ -98,7 +98,8 @@ async def on_message(message):
 
     elif any(word in message.content.lower() for word in ["good night", "gn", "goodnight"]):
         await message.channel.send("https://c.tenor.com/9iKFU2dG6A4AAAAC/goodnight-sleeping.gif")
-        
+        await message.channel.send("Good night {username}!".format(username=message.author.name))
+
     await bot.process_commands(message)
 
 # define cogs
