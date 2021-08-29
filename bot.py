@@ -96,7 +96,7 @@ async def on_message(message):
     elif "pityroll" == message.content.lower():
         await message.channel.send("https://i.imgur.com/8ehEWKJ.mp4")
 
-    elif any(word in message.content.lower() for word in ["good night", "gn", "goodnight"]):
+    elif any(word in message.content.lower() for word in ["good night", "goodnight"]):
         await message.channel.send("https://c.tenor.com/9iKFU2dG6A4AAAAC/goodnight-sleeping.gif")
         await message.channel.send("Good night {username}!".format(username=message.author.name))
 
