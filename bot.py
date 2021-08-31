@@ -44,11 +44,12 @@ async def on_message(message):
 
     nice_variations = ['nice', 'naisu', 'naice', ]
 
-    for word in nice_variations:
-        if "NICE!" == message.content.strip():
+    if "NICE!" == message.content.strip():
             await message.channel.send("NAISU!")
-        elif word in message.content.strip().lower():
-            await message.channel.send("Naisu!")
+    else:
+        for word in nice_variations:
+            if word in message.content.strip().lower():
+                await message.channel.send("Naisu!")
 
     if "JT" in message.content:
         await message.channel.send("You mean professional jungler WingedNinja2?")
